@@ -60,7 +60,7 @@
 
   /* ---------- Validación (misma regla que _normalizar() en SQL) ---------- */
   const RE_NOMBRE = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' .-]{3,80}$/;
-  const RE_CORREO = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
+  const RE_CORREO = /^[a-z0-9._%+-]+@gmail\.com$/;   // solo cuentas Gmail
 
   /** Deja el teléfono en 10 dígitos; quita la lada del país si sobra (BUG-01 v1). */
   function limpiarTelefono(valor) {
@@ -84,7 +84,7 @@
     if (!d.nombre) e.nombre = 'Escribe tu nombre.';
     else if (!RE_NOMBRE.test(d.nombre)) e.nombre = 'Usa solo letras y espacios (3 a 80 caracteres).';
     if (!d.correo) e.correo = 'Escribe tu correo.';
-    else if (d.correo.length > 120 || !RE_CORREO.test(d.correo)) e.correo = 'El correo debe verse así: nombre@dominio.com';
+    else if (d.correo.length > 120 || !RE_CORREO.test(d.correo)) e.correo = 'Solo se aceptan correos de Gmail, por ejemplo: nombre@gmail.com';
     if (!d.telefono) e.telefono = 'Escribe tu número de WhatsApp.';
     else if (d.telefono.length !== 10) e.telefono = 'Deben ser 10 dígitos.';
     if (d.asiento && !partesAsiento(d.asiento)) e.asiento = 'Ese asiento no existe.';

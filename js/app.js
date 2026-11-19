@@ -4,7 +4,7 @@
 (function () {
   'use strict';
   const CFG = window.CONFIG;
-  const { Datos, Sala } = window;
+  const { Datos, Sala, Compartir } = window;
   const { $, aplicarConfig, avisos, enrutador, dibujarQR, guardar, leer, borrar, mensaje } = window.Comun;
   const TOTAL = CFG.sala.mesas * CFG.sala.asientosPorMesa;
   const CLAVE_MIO = 'cm:mi-registro';
@@ -109,6 +109,7 @@
       resumen();
       refrescar();
       rutas.ir('boleto');
+      if (Compartir.correoActivo()) enviarCorreoBoleto(r, true);
     } catch (err) {
       mensaje(m, err.message, 'error');
       if (err.codigo === 'CORREO_DUPLICADO') errores({ correo: 'Este correo ya está registrado.' });
@@ -146,6 +147,55 @@
     const wa = enlaceWhatsApp(r);
     $('#b-whatsapp').href = wa;
     dibujarQR($('#qr-whatsapp'), wa, 'L');
+    $('#b-correo').hidden = !Compartir.correoActivo();
+    prepararImagen(r);
+  }
+
+  /* La imagen se genera antes del clic: el menú de compartir del celular
+     solo se abre si se llama justo en el gesto del usuario. */
+  let imagen = null;   // { folio, blob }
+  function prepararImagen(r) {
+    if (imagen && imagen.folio === r.folio && imagen.codigo === r.codigo_qr) return;
+    imagen = null;
+    $('#b-compartir').disabled = true;
+    $('#b-descargar').disabled = true;
+    Compartir.imagenBoleto(r).then((blob) => {
+      imagen = { folio: r.folio, codigo: r.codigo_qr, blob };
+      $('#b-compartir').disabled = false;
+      $('#b-descargar').disabled = false;
+    }).catch((e) => console.error('[Imagen]', e));
+  }
+  function prepararBotonesBoleto() {
+    const m = $('#mensaje-boleto');
+    $('#b-compartir').addEventListener('click', async () => {
+      const r = leer(localStorage, CLAVE_MIO);
+      if (!r || !imagen) return;
+      const res = await Compartir.compartir(r, imagen.blob);
+      if (res === 'descargado') mensaje(m, 'Se descargó la imagen de tu boleto. Adjúntala en el chat de WhatsApp que se abrió.', 'ok');
+    });
+    $('#b-descargar').addEventListener('click', () => {
+      const r = leer(localStorage, CLAVE_MIO);
+      if (r && imagen) Compartir.descargar(imagen.blob, `boleto-${r.folio}.png`);
+    });
+    $('#b-correo').addEventListener('click', () => {
+      const r = leer(localStorage, CLAVE_MIO);
+      if (r) enviarCorreoBoleto(r, false);
+    });
+  }
+  async function enviarCorreoBoleto(r, automatico) {
+    const m = $('#mensaje-boleto');
+    const btn = $('#b-correo');
+    btn.disabled = true;
+    mensaje(m, `Enviando la confirmación a ${r.correo}…`);
+    try {
+      await Compartir.enviarCorreo(r);
+      mensaje(m, `Te enviamos la confirmación de tu lugar a ${r.correo}. Revisa también la carpeta de spam.`, 'ok');
+    } catch (e) {
+      console.error('[Correo]', e);
+      mensaje(m, automatico
+        ? 'Tu lugar quedó registrado, pero no pudimos enviarte el correo. Toca «Enviar a mi correo» para reintentar.'
+        : 'No pudimos enviar el correo. Revisa tu conexión y vuelve a intentarlo.', 'error');
+    } finally { btn.disabled = false; }
   }
 
   /* ---------------- Mi lugar ---------------- */
@@ -217,6 +267,8 @@
     prepararFormulario();
     prepararConsulta();
     $('#b-imprimir').addEventListener('click', () => window.print());
+    prepararBotonesBoleto();
+    $('#contacto-wa').href = Compartir.enlaceContacto();
     resumen();
     rutas = enrutador('inicio', (v) => { if (v === 'boleto') pintarBoleto(); if (v === 'registro') refrescar(); });
     refrescar().then(() => {

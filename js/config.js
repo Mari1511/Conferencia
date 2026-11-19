@@ -27,7 +27,20 @@ window.CONFIG = {
 
   /* Número que recibe las confirmaciones: formato internacional sin «+».
      México: 52 + 10 dígitos, p. ej. '525512345678'.  ← CÁMBIALO */
-  whatsapp: { numeroOrganizador: '525500000000', ladaPais: '52' },
+  whatsapp: {
+    numeroOrganizador: '525634801943',
+    ladaPais: '52',
+    /* Mensaje con el que se abre el chat del botón flotante «Escríbenos» */
+    mensajeContacto: 'Hola, tengo una duda sobre la conferencia magistral «Cómo se gana una partida normal».'
+  },
+
+  /* Correo de confirmación automático con EmailJS (gratis, sin servidor).
+     Vacío = no se envían correos. Pasos en el README, sección 4 (EmailJS). */
+  correo: {
+    serviceId: '',      // ej. 'service_abc123'
+    templateId: '',     // ej. 'template_xyz789'
+    publicKey: ''       // Account → Public Key
+  },
 
   /* Vacío = MODO DEMOSTRACIÓN (datos en el navegador; panel: admin / Conferencia2026!).
      Con datos = base compartida en Supabase (ver README, sección 4). */

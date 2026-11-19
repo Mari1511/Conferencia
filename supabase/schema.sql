@@ -161,7 +161,7 @@ begin
   telefono := regexp_replace(coalesce(p_telefono, ''), '\D', '', 'g');
   if nombre !~ '^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ'' .-]{3,80}$'
      or char_length(correo) > 120
-     or correo !~ '^[^@\s]+@[^@\s]+\.[^@\s]{2,}$'
+     or correo !~ '^[a-z0-9._%+-]+@gmail\.com$'   -- solo cuentas Gmail
      or telefono !~ '^[0-9]{10}$' then
     raise exception 'DATOS_INVALIDOS';
   end if;

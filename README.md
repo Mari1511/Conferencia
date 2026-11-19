@@ -70,12 +70,30 @@ Restricciones contra duplicados: correo, teléfono, asiento, folio y código QR 
 teléfono de 10 dígitos; asignación con `FOR UPDATE SKIP LOCKED` y reintento (probado con 110
 registros simultáneos). Diagrama completo en `docs/diagramas/entidad_relacion.svg`.
 
+### Correo de confirmación (EmailJS)
+
+GitHub Pages no tiene servidor, así que el correo se envía con [EmailJS](https://www.emailjs.com)
+(plan gratuito: 200 correos al mes). Sin configurarlo, el sitio funciona igual pero no manda correos.
+
+1. Crea una cuenta en EmailJS → *Email Services → Add New Service* → **Gmail** → conecta tu cuenta.
+   Copia el **Service ID**.
+2. *Email Templates → Create New Template*. En **To Email** escribe `{{to_email}}` y en **Subject**
+   `Tu lugar en la conferencia: mesa {{mesa}}, asiento {{asiento}}`. En el contenido puedes usar:
+   `{{to_name}}`, `{{evento}}`, `{{mesa}}`, `{{asiento}}`, `{{folio}}`, `{{codigo}}`, `{{fecha}}`,
+   `{{hora}}`, `{{lugar}}`, `{{enlace}}` (recuperar boleto) y `{{whatsapp}}` (contacto). Guarda y copia el **Template ID**.
+3. *Account → General*: copia la **Public Key**.
+4. Pega los tres valores en `js/config.js` → `correo`.
+5. Opcional: *Account → Security → Allowed origins*: `https://mari1511.github.io` para que nadie más use tu cuenta.
+
 ## 5. Cómo funciona
 
 **Asistente:** Registro → escribe nombre, correo y WhatsApp → asignación automática o elige asiento en el
 plano → recibe su **boleto con QR de acceso único** (`CMLOL-` + 24 caracteres aleatorios) → toca
-«Confirmar por WhatsApp» (se abre con el mensaje ya escrito) → si lo pierde, lo recupera en «Mi lugar»
-con folio y correo.
+«Confirmar con el organizador» (se abre WhatsApp con el mensaje ya escrito) → recibe la confirmación por
+correo (si EmailJS está configurado) → puede **compartir su boleto como imagen por WhatsApp** (en el
+celular se abre el menú de compartir con la imagen; en la computadora se descarga y se abre WhatsApp) →
+si lo pierde, lo recupera en «Mi lugar» con folio y correo. En todo el portal hay un botón flotante
+«¿Dudas? Escríbenos» que abre un chat de WhatsApp con el organizador.
 
 **Organización:** consulta y busca asistentes, da de alta, edita, reasigna asiento, marca quién confirmó
 por WhatsApp, elimina y exporta a CSV. En **Control de acceso** lee el QR con la cámara (jsQR), desde una
@@ -93,6 +111,7 @@ css/estilos.css            Guía visual completa (variables, componentes, celula
 js/config.js               Configuración
 js/datos.js                Validación + adaptador demo (localStorage) + adaptador Supabase (RPC)
 js/comun.js                Navegación por pestañas, QR, avisos
+js/compartir.js            Imagen del boleto, compartir por WhatsApp, correo (EmailJS)
 js/sala.js                 Plano de mesas
 js/app.js · js/admin.js    Lógica del portal y del panel
 js/vendor/                 qrcode-generator 1.4.4 (MIT) · jsQR 1.4.0 (Apache 2.0)
