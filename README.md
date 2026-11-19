@@ -20,7 +20,7 @@ validar a cada asistente en la entrada. La confirmación de asistencia se hace p
 ## 1. Probarlo en tu computadora
 
 ```bash
-cd conferencia-lol
+cd Conferencia
 python -m http.server 8000
 ```
 Abre `http://localhost:8000` (portal) y `http://localhost:8000/admin.html` (panel).

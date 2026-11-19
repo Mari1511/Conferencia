@@ -30,7 +30,7 @@ window.CONFIG = {
   whatsapp: { numeroOrganizador: '525500000000', ladaPais: '52' },
 
   /* Vacío = MODO DEMOSTRACIÓN (datos en el navegador; panel: admin / Conferencia2026!).
-     Con datos = base compartida en Supabase (ver README, sección 5). */
+     Con datos = base compartida en Supabase (ver README, sección 4). */
   supabase: {
     url: '',            // ej. 'https://abcdefghijkl.supabase.co'
     clavePublica: ''    // clave anon o publishable
