@@ -1,0 +1,103 @@
+=== C1. CREATE: registro con asignación automática ===
+ registrado 
+------------
+ t
+(1 row)
+
+=== C2. CREATE: registro eligiendo asiento (mesa 5, asiento 7) ===
+   nombre   | mesa | lugar 
+------------+------+-------
+ Luis Gómez | 5    | 7
+(1 row)
+
+=== R1. READ: lista de ocupados (sin datos personales) ===
+   asientos_ocupados    
+------------------------
+ ["M01-A01", "M05-A07"]
+(1 row)
+
+=== R2. READ directo a la tabla con la clave pública (debe fallar) ===
+ERROR:  permission denied for table asistentes
+=== X1. RESTRICCIÓN: correo duplicado ===
+ERROR:  CORREO_DUPLICADO
+=== X2. RESTRICCIÓN: teléfono duplicado ===
+ERROR:  TELEFONO_DUPLICADO
+=== X3. RESTRICCIÓN: asiento ocupado ===
+ERROR:  ASIENTO_OCUPADO
+=== X4. RESTRICCIÓN: datos inválidos ===
+ERROR:  DATOS_INVALIDOS
+=== A1. Panel: clave incorrecta ===
+ERROR:  CREDENCIALES_INVALIDAS
+=== A2. Panel: sin sesión ===
+ERROR:  SESION_INVALIDA
+=== A3. Panel: inicio de sesión correcto ===
+ largo_token 
+-------------
+          48
+(1 row)
+
+=== R3. READ (panel): asistentes registrados ===
+ id |    folio     |   nombre   | mesa | lugar 
+----+--------------+------------+------+-------
+ 1  | LOL-15BD3D6C | Ana López  | 1    | 1
+ 2  | LOL-08ABE812 | Luis Gómez | 5    | 7
+(2 rows)
+
+=== U1. UPDATE (panel): cambiar a Luis a la mesa 2, asiento 3 y marcar WhatsApp ===
+     nombre      | asiento | whatsapp 
+-----------------+---------+----------
+ Luis Gómez Ruiz | M02-A03 | true
+(1 row)
+
+=== U2. UPDATE (panel): mover a un asiento ocupado (debe fallar) ===
+ERROR:  ASIENTO_OCUPADO
+=== Q1. QR único por asistente: validar en la entrada ===
+ primera_lectura 
+-----------------
+ VALIDO
+(1 row)
+
+ segunda_lectura 
+-----------------
+ YA_INGRESO
+(1 row)
+
+ qr_inventado 
+--------------
+ NO_VALIDO
+(1 row)
+
+=== R4. READ (panel): resumen ===
+                             admin_resumen                              
+------------------------------------------------------------------------
+ {"cupo" : 100, "registrados" : 2, "asistieron" : 1, "confirmados" : 1}
+(1 row)
+
+=== D1. DELETE (panel): eliminar a Luis ===
+ eliminado 
+-----------
+ t
+(1 row)
+
+ registrados_despues 
+---------------------
+ 1
+(1 row)
+
+=== D2. DELETE (asistente): cancelar con folio y correo equivocado (debe fallar) ===
+ERROR:  NO_ENCONTRADO
+=== R5. READ (panel): bitácora de accesos ===
+ resultado  |  nombre   
+------------+-----------
+ NO_VALIDO  | 
+ YA_INGRESO | Ana López
+ VALIDO     | Ana López
+(3 rows)
+
+=== A4. Cerrar sesión y volver a usar el token (debe fallar) ===
+ admin_cerrar_sesion 
+---------------------
+ t
+(1 row)
+
+ERROR:  SESION_INVALIDA

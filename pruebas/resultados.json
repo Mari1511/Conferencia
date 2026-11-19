@@ -1,0 +1,407 @@
+{
+  "fecha": "2026-11-19 01:49",
+  "chromium": "157.0.8103.78",
+  "duracion_s": 63.5,
+  "casos": [
+    {
+      "id": "P-01",
+      "actividad": "Registros de prueba",
+      "nombre": "Registro con asignación automática",
+      "esperado": "Guarda, asigna el primer lugar libre y muestra boleto con QR",
+      "obtenido": "Boleto «Mesa 1 · Asiento 1», folio LOL-AD845AE1, código CMLOL-ACDD33…",
+      "ok": true,
+      "evidencia": [
+        "P01_formulario.png",
+        "P01_boleto.png"
+      ]
+    },
+    {
+      "id": "P-02",
+      "actividad": "Almacenamiento",
+      "nombre": "El registro queda guardado",
+      "esperado": "Al recargar, el registro sigue en la base y el contador baja",
+      "obtenido": "Tras recargar: 1 registro en la base, contador en 99 libres",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "P-03",
+      "actividad": "Registros de prueba",
+      "nombre": "Validación de campos obligatorios",
+      "esperado": "No guarda y marca cada campo vacío",
+      "obtenido": "Mensajes: Escribe tu nombre. | Escribe tu correo. | Escribe tu número de WhatsApp. | Marca la casilla para continuar.",
+      "ok": true,
+      "evidencia": [
+        "P03_obligatorios.png"
+      ]
+    },
+    {
+      "id": "P-04",
+      "actividad": "Registros de prueba",
+      "nombre": "Validación de formato",
+      "esperado": "Rechaza nombre con números, correo sin dominio y teléfono incompleto",
+      "obtenido": "Mensajes: Usa solo letras y espacios (3 a 80 caracteres). | El correo debe verse así: nombre@dominio.com | Deben ser 10 dígitos.",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "P-05",
+      "actividad": "Registros de prueba",
+      "nombre": "WhatsApp escrito con lada 52",
+      "esperado": "Se guarda el número nacional de 10 dígitos",
+      "obtenido": "Escrito «+52 55 2222 2222» → guardado 5522222222",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "P-06",
+      "actividad": "Duplicados",
+      "nombre": "Correo repetido",
+      "esperado": "Rechaza el mismo correo aunque cambien mayúsculas o espacios",
+      "obtenido": "«Ese correo ya tiene un lugar reservado. Recupera tu boleto en «Mi lugar».»",
+      "ok": true,
+      "evidencia": [
+        "P06_correo_duplicado.png"
+      ]
+    },
+    {
+      "id": "P-07",
+      "actividad": "Duplicados",
+      "nombre": "WhatsApp repetido",
+      "esperado": "Rechaza el mismo número",
+      "obtenido": "«Ese número de WhatsApp ya tiene un lugar reservado. Recupera tu boleto en «Mi lugar».»",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "P-08",
+      "actividad": "Asignación de asientos",
+      "nombre": "Elegir asiento en el plano",
+      "esperado": "Guarda exactamente el asiento tocado",
+      "obtenido": "«Elegiste la mesa 5, asiento 7.» → boleto mesa 5, asiento 7",
+      "ok": true,
+      "evidencia": [
+        "P08_eleccion.png"
+      ]
+    },
+    {
+      "id": "P-09",
+      "actividad": "Asignación de asientos",
+      "nombre": "Asiento ocupado bloqueado",
+      "esperado": "Los asientos de otras personas no se pueden elegir",
+      "obtenido": "Mesa 1, asiento 1: deshabilitado=True, «Mesa 1, asiento 1, ocupado»",
+      "ok": true,
+      "evidencia": [
+        "P09_ocupado.png"
+      ]
+    },
+    {
+      "id": "P-10",
+      "actividad": "Asignación de asientos",
+      "nombre": "Asignación automática en orden",
+      "esperado": "Cada registro automático recibe el siguiente lugar libre",
+      "obtenido": "Con M01-A01 y M01-A02 ocupados, el siguiente automático fue M01-A03",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "P-11",
+      "actividad": "QR único",
+      "nombre": "Cada asistente tiene un QR distinto",
+      "esperado": "Folios y códigos QR no se repiten; el QR del boleto contiene el código",
+      "obtenido": "4 registros, 4 códigos distintos; OpenCV leyó del boleto «CMLOL-CCDD3F5CDFE21EEF3715D873»",
+      "ok": true,
+      "evidencia": [
+        "P11_qr_boleto.png"
+      ]
+    },
+    {
+      "id": "P-12",
+      "actividad": "WhatsApp",
+      "nombre": "Mensaje de confirmación",
+      "esperado": "El botón abre wa.me con nombre, folio, lugar y código; el QR de WhatsApp lleva al mismo enlace",
+      "obtenido": "Mensaje: «Hola, confirmo mi asistencia a la conferencia magistral «Cómo se gana una partida normal». … Lugar: mesa 1, asiento 3»; QR leído = enlace: True",
+      "ok": true,
+      "evidencia": [
+        "P12_qr_whatsapp.png"
+      ]
+    },
+    {
+      "id": "P-13",
+      "actividad": "Registros de prueba",
+      "nombre": "Recuperar boleto en «Mi lugar»",
+      "esperado": "Con folio y correo se vuelve a mostrar el boleto",
+      "obtenido": "Folio en minúsculas → boleto de «Ana López»",
+      "ok": true,
+      "evidencia": [
+        "P13_mi_lugar.png"
+      ]
+    },
+    {
+      "id": "P-14",
+      "actividad": "Registros de prueba",
+      "nombre": "Liberar lugar con correo equivocado",
+      "esperado": "No se cancela si el correo no corresponde al folio",
+      "obtenido": "«No encontramos un registro con esos datos. Revisa el folio y el correo.»; registros siguen en 4",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "P-15",
+      "actividad": "Asignación de asientos",
+      "nombre": "Cupo lleno",
+      "esperado": "Con 100 registros no permite registrar más",
+      "obtenido": "Botón desactivado=True; «Ya no quedan lugares: los 100 asientos están reservados.»; intento forzado → CUPO_LLENO",
+      "ok": true,
+      "evidencia": [
+        "P15_cupo_lleno.png"
+      ]
+    },
+    {
+      "id": "A-01",
+      "actividad": "Panel administrativo",
+      "nombre": "Acceso con contraseña incorrecta",
+      "esperado": "No entra y muestra un mensaje",
+      "obtenido": "«Usuario o contraseña incorrectos.»",
+      "ok": true,
+      "evidencia": [
+        "A01_login_error.png"
+      ]
+    },
+    {
+      "id": "A-02",
+      "actividad": "Panel administrativo",
+      "nombre": "Consultar asistentes (Read)",
+      "esperado": "Con usuario y contraseña correctos muestra estadísticas y la tabla",
+      "obtenido": "4 filas en la tabla; registrados = 4",
+      "ok": true,
+      "evidencia": [
+        "A02_panel.png"
+      ]
+    },
+    {
+      "id": "A-03",
+      "actividad": "Panel administrativo",
+      "nombre": "Buscar",
+      "esperado": "Filtra por nombre, correo, folio o teléfono",
+      "obtenido": "«luis» → 1 resultado",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "A-04",
+      "actividad": "Panel administrativo",
+      "nombre": "Alta manual (Create)",
+      "esperado": "El organizador registra a alguien y se le asigna lugar y QR",
+      "obtenido": "«Invitado Especial quedó registrado en la mesa 10, asiento 1 (folio LOL-22609630).»",
+      "ok": true,
+      "evidencia": [
+        "A04_alta.png"
+      ]
+    },
+    {
+      "id": "A-05",
+      "actividad": "Panel administrativo",
+      "nombre": "Modificar y reasignar asiento (Update)",
+      "esperado": "Cambia datos, mueve de asiento y marca la confirmación de WhatsApp",
+      "obtenido": "Guardado: «Luis Gómez Ruiz», M02-A03, WhatsApp confirmado; el selector no ofrece asientos ocupados (M01-A01 ausente); contador WhatsApp = 1",
+      "ok": true,
+      "evidencia": [
+        "A05_editar.png"
+      ]
+    },
+    {
+      "id": "A-06",
+      "actividad": "Panel administrativo",
+      "nombre": "Reasignar a un asiento ocupado",
+      "esperado": "La base de datos lo rechaza aunque se fuerce desde código",
+      "obtenido": "Mover a Eva a M01-A01 (de Ana) → ASIENTO_OCUPADO",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "A-07",
+      "actividad": "Panel administrativo",
+      "nombre": "Eliminar (Delete)",
+      "esperado": "Pide confirmación, borra el registro y libera el asiento",
+      "obtenido": "Tabla con 4 filas; M10-A01 ocupado: False",
+      "ok": true,
+      "evidencia": [
+        "A07_eliminar.png"
+      ]
+    },
+    {
+      "id": "A-08",
+      "actividad": "Panel administrativo",
+      "nombre": "Exportar a CSV",
+      "esperado": "Descarga un archivo con todos los asistentes",
+      "obtenido": "asistentes-conferencia.csv: encabezado + 4 filas",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "P-16",
+      "actividad": "Lectura y validación de QR",
+      "nombre": "Validar QR escrito a mano",
+      "esperado": "Primera vez «válido», segunda «ya ingresó», inventado «no válido»",
+      "obtenido": "VALIDO → YA_INGRESO → NO_VALIDO",
+      "ok": true,
+      "evidencia": [
+        "P16_ya_ingreso.png",
+        "P16_no_valido.png"
+      ]
+    },
+    {
+      "id": "P-17",
+      "actividad": "Lectura y validación de QR",
+      "nombre": "Validar QR desde una foto",
+      "esperado": "Lee el QR de una imagen del boleto y lo valida",
+      "obtenido": "VALIDO: «Mia Soto: mesa 1, asiento 3. Bienvenida(o). · Leído con foto.»",
+      "ok": true,
+      "evidencia": [
+        "P17_foto_qr.png"
+      ]
+    },
+    {
+      "id": "P-18",
+      "actividad": "Lectura y validación de QR",
+      "nombre": "Leer el QR con la cámara",
+      "esperado": "La cámara detecta el QR del boleto y registra el acceso",
+      "obtenido": "Resultado YA_INGRESO: «Mia Soto ya entró a las 01:48 a.m. (mesa 1, asiento 3). · Leído con cámara.»",
+      "ok": true,
+      "evidencia": [
+        "P18_camara.png"
+      ]
+    },
+    {
+      "id": "N-CO",
+      "actividad": "Navegación",
+      "nombre": "Navegación en computadora",
+      "esperado": "Todas las vistas abren desde el menú, sin desbordes y con atrás/adelante",
+      "obtenido": "6 vistas revisadas; botón atrás regresó a Registro; sin problemas",
+      "ok": true,
+      "evidencia": [
+        "N_computadora_inicio.png",
+        "N_computadora_temas.png",
+        "N_computadora_registro.png",
+        "N_computadora_mi-lugar.png",
+        "N_computadora_admin_asistentes.png",
+        "N_computadora_admin_acceso.png"
+      ]
+    },
+    {
+      "id": "N-CE",
+      "actividad": "Navegación",
+      "nombre": "Navegación en celular",
+      "esperado": "Todas las vistas abren desde el menú, sin desbordes y con atrás/adelante",
+      "obtenido": "6 vistas revisadas; botón atrás regresó a Registro; sin problemas",
+      "ok": true,
+      "evidencia": [
+        "N_celular_inicio.png",
+        "N_celular_temas.png",
+        "N_celular_registro.png",
+        "N_celular_mi-lugar.png",
+        "N_celular_admin_asistentes.png",
+        "N_celular_admin_acceso.png"
+      ]
+    },
+    {
+      "id": "I-01",
+      "actividad": "Interrupciones",
+      "nombre": "Recargar a mitad del registro",
+      "esperado": "Lo escrito y el asiento elegido se conservan",
+      "obtenido": "['Recarga Prueba', 'recarga@correo.com', '5577777777'], asiento ['M02-A05']",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "I-02",
+      "actividad": "Interrupciones",
+      "nombre": "Girar el teléfono con el boleto abierto",
+      "esperado": "El boleto sigue visible y sin errores",
+      "obtenido": "QR visible=True; sin desborde horizontal=True",
+      "ok": true,
+      "evidencia": [
+        "I02_giro.png"
+      ]
+    },
+    {
+      "id": "I-03",
+      "actividad": "Interrupciones",
+      "nombre": "Perder la conexión",
+      "esperado": "Aparece el aviso y desaparece al volver la red",
+      "obtenido": "Aviso «Sin conexión a Internet» visible y luego oculto",
+      "ok": true,
+      "evidencia": [
+        "I03_sin_red.png"
+      ]
+    },
+    {
+      "id": "I-04",
+      "actividad": "Interrupciones",
+      "nombre": "Sesión del panel vencida",
+      "esperado": "Si el token deja de servir, regresa al inicio de sesión",
+      "obtenido": "Regresó al login con «Tu sesión terminó. Vuelve a iniciar sesión.»",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "B-01",
+      "actividad": "Almacenamiento",
+      "nombre": "Registro guardado en PostgreSQL",
+      "esperado": "La página guarda en la tabla asistentes mediante la función RPC",
+      "obtenido": "Fila: ('Base Real', 'M01-A01', 'auto', 30); aviso de modo demo oculto: True",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "B-02",
+      "actividad": "Panel administrativo",
+      "nombre": "Panel contra la base real",
+      "esperado": "Inicio de sesión con bcrypt, edición y validación de QR en PostgreSQL",
+      "obtenido": "Sesiones abiertas: 1; confirmado_whatsapp=True, asistio_en registrado=True; bitácora: [('VALIDO',)]",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "B-03",
+      "actividad": "Asignación de asientos",
+      "nombre": "Otra persona gana el asiento elegido",
+      "esperado": "Avisa, quita la selección y actualiza el plano",
+      "obtenido": "«Ese asiento acaba de ocuparse. Elige otro; el plano ya está actualizado.»; selección liberada: True",
+      "ok": true,
+      "evidencia": [
+        "B03_asiento_ganado.png"
+      ]
+    },
+    {
+      "id": "B-04",
+      "actividad": "Interrupciones",
+      "nombre": "Sin Internet / servidor caído al registrar",
+      "esperado": "Mensaje claro, datos conservados y reintento exitoso",
+      "obtenido": "Sin red: «No hay conexión a Internet. Conéctate y vuelve a intentarlo; tus datos siguen aquí.» | Error 503: «El servidor no respondió. Espera unos segundos y vuelve a intentarlo.» | al reintentar se registró",
+      "ok": true,
+      "evidencia": [
+        "B04_sin_red.png"
+      ]
+    },
+    {
+      "id": "B-05",
+      "actividad": "Duplicados",
+      "nombre": "Seguridad de la base",
+      "esperado": "Con la clave pública no se pueden leer tablas ni usar el panel sin sesión",
+      "obtenido": "permission denied for table asistentes | permission denied for table administradores | SESION_INVALIDA",
+      "ok": true,
+      "evidencia": []
+    },
+    {
+      "id": "B-06",
+      "actividad": "QR único",
+      "nombre": "100 registros simultáneos",
+      "esperado": "100 asientos distintos, 100 QR distintos y «cupo lleno» para el resto",
+      "obtenido": "3 rondas de 110 peticiones en paralelo (guardados, asientos distintos, QR distintos, cupo lleno): (100, 100, 100, 10); (100, 100, 100, 10); (100, 100, 100, 10)",
+      "ok": true,
+      "evidencia": []
+    }
+  ]
+}

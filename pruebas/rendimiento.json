@@ -1,0 +1,19 @@
+{
+  "computadora": {
+    "fcp": 139.2,
+    "lista": 95.4,
+    "carga": 99.1,
+    "guardar": 1.0,
+    "n": 5
+  },
+  "peticiones": 11,
+  "bytes": 160118,
+  "raster": 0,
+  "celular_3g": {
+    "fcp": 1017.3,
+    "lista": 1079.3,
+    "carga": 1257.7,
+    "guardar": 4.7,
+    "n": 3
+  }
+}

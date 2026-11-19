@@ -1,0 +1,12 @@
+              List of relations
+ Schema |      Name       | Type  |  Owner   
+--------+-----------------+-------+----------
+ public | accesos         | table | postgres
+ public | administradores | table | postgres
+ public | asientos        | table | postgres
+ public | asistentes      | table | postgres
+ public | evento          | table | postgres
+ public | mesas           | table | postgres
+ public | sesiones_admin  | table | postgres
+(7 rows)
+
