@@ -1,0 +1,6 @@
+Bibliotecas de terceros incluidas
+=================================
+qrcode.min.js  qrcode-generator 1.4.4 © 2009 Kazuhiko Arase — Licencia MIT (minificado con terser)
+jsqr.min.js    jsQR 1.4.0 © Cosmo Wolfe — Apache License 2.0 (ver LICENSE-jsQR.txt; minificado con terser)
+"QR Code" es marca registrada de DENSO WAVE INCORPORATED.
+Fuentes (carpeta fonts): Marcellus y Barlow, SIL Open Font License 1.1 (ver OFL-*.txt), de @fontsource.

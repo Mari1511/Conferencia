@@ -1,0 +1,49 @@
+digraph ER {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", nodesep=0.6, ranksep=1.1, pad=0.3];
+  node [shape=plaintext, fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=10, color="#444444", penwidth=1.3];
+  evento [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>evento</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  smallint</TD></TR>
+    <TR><TD ALIGN="LEFT">nombre, tema  text</TD></TR><TR><TD ALIGN="LEFT">fecha  date</TD></TR>
+    <TR><TD ALIGN="LEFT">hora_inicio, hora_fin  time</TD></TR><TR><TD ALIGN="LEFT">lugar, ponente  text</TD></TR><TR><TD ALIGN="LEFT">cupo  smallint</TD></TR></TABLE>>];
+  mesas [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>mesas</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  smallint</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="ev"><B>FK</B> evento_id</TD></TR><TR><TD ALIGN="LEFT">capacidad  smallint</TD></TR></TABLE>>];
+  asientos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>asientos</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  text  ('M03-A05')</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="mesa"><B>FK</B> mesa_id</TD></TR><TR><TD ALIGN="LEFT">numero  smallint</TD></TR>
+    <TR><TD ALIGN="LEFT"><I>UQ (mesa_id, numero)</I></TD></TR></TABLE>>];
+  asistentes [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#785a28"><FONT COLOR="white"><B>asistentes</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  integer</TD></TR>
+    <TR><TD ALIGN="LEFT">folio  text  <I>UQ</I></TD></TR><TR><TD ALIGN="LEFT">codigo_qr  text  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT">nombre  text</TD></TR><TR><TD ALIGN="LEFT">correo  text  <I>UQ</I></TD></TR><TR><TD ALIGN="LEFT">telefono  text  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="asiento"><B>FK</B> asiento_id  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT">modo  text</TD></TR><TR><TD ALIGN="LEFT">confirmado_whatsapp  boolean</TD></TR>
+    <TR><TD ALIGN="LEFT">asistio_en  timestamptz</TD></TR><TR><TD ALIGN="LEFT">creado_en, actualizado_en</TD></TR></TABLE>>];
+  administradores [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>administradores</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  smallint</TD></TR>
+    <TR><TD ALIGN="LEFT">usuario  text  <I>UQ</I></TD></TR><TR><TD ALIGN="LEFT">nombre  text</TD></TR><TR><TD ALIGN="LEFT">clave_hash  text (bcrypt)</TD></TR><TR><TD ALIGN="LEFT">creado_en</TD></TR></TABLE>>];
+  sesiones_admin [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>sesiones_admin</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B> token  text</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="adm"><B>FK</B> admin_id</TD></TR><TR><TD ALIGN="LEFT">creada_en, expira_en</TD></TR></TABLE>>];
+  accesos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>accesos</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B> id  integer</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="asi"><B>FK</B> asistente_id  (nulo si no existe)</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="adm"><B>FK</B> admin_id</TD></TR>
+    <TR><TD ALIGN="LEFT">codigo_leido  text</TD></TR><TR><TD ALIGN="LEFT">resultado  VALIDO | YA_INGRESO | NO_VALIDO</TD></TR><TR><TD ALIGN="LEFT">fecha  timestamptz</TD></TR></TABLE>>];
+
+  evento:id -> mesas:ev [dir=both, arrowtail=tee, arrowhead=crow, label="1 : N\ntiene"];
+  mesas:id -> asientos:mesa [dir=both, arrowtail=tee, arrowhead=crow, label="1 : N\ntiene"];
+  asientos:id -> asistentes:asiento [dir=both, arrowtail=tee, arrowhead=teeodot, label="1 : 0..1\nocupa"];
+  asistentes:id -> accesos:asi [dir=both, arrowtail=teeodot, arrowhead=crowodot, label="1 : N\nse valida"];
+  administradores:id -> accesos:adm [dir=both, arrowtail=tee, arrowhead=crowodot, label="1 : N\nregistra"];
+  administradores:id -> sesiones_admin:adm [dir=both, arrowtail=tee, arrowhead=crowodot, label="1 : N\nabre"];
+  {rank=same; administradores; asistentes}
+}

@@ -1,0 +1,37 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Guía de estilo — Conferencia magistral</title>
+<link rel="stylesheet" href="../../css/estilos.css">
+<style>
+.g{max-width:1100px;margin:0 auto;padding:2rem}.g h2{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--oro-2);margin:2.2rem 0 1rem}
+.sw{display:grid;grid-template-columns:repeat(6,1fr);gap:.8rem}.sw div{border:1px solid var(--oro-5);font-size:.78rem;color:var(--texto-2)}.sw i{display:block;height:64px}.sw p{margin:.4rem .5rem}
+.fila2{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}.ti{font-family:var(--f-titulo)}
+.hov{color:var(--oro-1)!important;border-image:linear-gradient(180deg,var(--oro-1),var(--oro-2)) 1!important;box-shadow:0 0 10px -2px rgba(200,170,110,.5),inset 0 0 10px -4px rgba(200,170,110,.6)}
+.as{position:relative;width:34px;height:34px;display:inline-block}.as .asiento{width:100%;left:50%;top:50%;position:absolute}
+</style></head><body><div class="g">
+<span class="etiqueta">Etapa 2 · Guía visual</span><h1 style="font-size:1.8rem;text-transform:uppercase;letter-spacing:.08em">Guía de estilo</h1>
+<p style="color:var(--texto-2);max-width:46rem">Estilo inspirado en los clientes de juegos de fantasía: azul noche, líneas doradas finas, mayúsculas espaciadas y mucho espacio libre. El dorado enmarca, el turquesa señala lo activo y el rojo solo aparece para errores u ocupado.</p>
+<h2>Colores</h2><div class="sw">
+<div><i style="background:#010a13"></i><p>Noche<br>#010A13 · fondo</p></div><div><i style="background:#0a1428"></i><p>Azul 1<br>#0A1428 · paneles</p></div><div><i style="background:#1e2328"></i><p>Gris 1<br>#1E2328 · botones</p></div>
+<div><i style="background:#f0e6d2"></i><p>Oro 1<br>#F0E6D2 · texto</p></div><div><i style="background:#c8aa6e"></i><p>Oro 2<br>#C8AA6E · acento</p></div><div><i style="background:#785a28"></i><p>Oro 4<br>#785A28 · bordes</p></div>
+<div><i style="background:#463714"></i><p>Oro 5<br>#463714 · bordes tenues</p></div><div><i style="background:#a09b8c"></i><p>Gris texto<br>#A09B8C · secundario</p></div><div><i style="background:#0ac8b9"></i><p>Turquesa<br>#0AC8B9 · activo / tu lugar</p></div>
+<div><i style="background:#005a82"></i><p>Turquesa oscuro<br>#005A82 · botón principal</p></div><div><i style="background:#e84057"></i><p>Rojo<br>#E84057 · error / ocupado</p></div><div><i style="background:#2fd889"></i><p>Verde<br>#2FD889 · éxito</p></div></div>
+<h2>Tipografía</h2><div class="panel">
+<p class="ti" style="font-size:2rem;margin:0;text-transform:uppercase;letter-spacing:.08em">Marcellus · Títulos</p>
+<p style="color:var(--texto-2)">Títulos de vista en mayúsculas con espaciado 0.08 em; etiquetas pequeñas de 0.72 rem con espaciado 0.16 em.</p>
+<span class="etiqueta">Etiqueta de sección</span>
+<p style="font-size:1rem;margin-top:1rem">Barlow · Texto. Se usa para párrafos, campos, tablas y números (cifras alineadas). Tamaño base 16 px, interlineado 1.55.</p>
+<p style="font-weight:600">Barlow semibold · folios y cifras destacadas: LOL-1A2B3C4D · 100 de 100</p></div>
+<h2>Botones</h2><div class="fila2">
+<button class="boton boton-principal">Principal</button><button class="boton">Secundario</button><button class="boton hov">Al pasar el cursor</button><button class="boton boton-whatsapp">WhatsApp</button><button class="boton boton-peligro">Peligro</button><button class="boton" disabled>Desactivado</button><button class="boton boton-texto">Texto</button></div>
+<h2>Campos y controles</h2><div class="panel" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem">
+<div class="campo"><label>Normal</label><input type="text" placeholder="Escribe aquí"></div>
+<div class="campo"><label>Con error</label><input type="text" value="Ana123" aria-invalid="true"><p class="error">Usa solo letras y espacios.</p></div>
+<div class="campo"><label>Selector</label><select><option>Mesa 3, asiento 5</option></select></div>
+<fieldset class="modo" style="grid-column:span 2"><legend class="grupo-titulo">Opción segmentada</legend><label class="opcion"><input type="radio" name="x" checked>Automática</label><label class="opcion"><input type="radio" name="x">Elegir</label></fieldset>
+<div><span class="grupo-titulo">Insignias</span><span class="insignia insignia-si">Sí</span> <span class="insignia insignia-no">No</span></div></div>
+<h2>Asientos del plano</h2><div class="fila2" style="color:var(--texto-2);font-size:.85rem">
+<span class="as"><button class="asiento">1</button></span> Libre <span class="as"><button class="asiento ocupado">2</button></span> Ocupado <span class="as"><button class="asiento elegido">3</button></span> Elegido <span class="as"><button class="asiento propio">4</button></span> Tu lugar</div>
+<h2>Elementos gráficos</h2><div class="panel" style="display:grid;grid-template-columns:1fr 2fr;gap:1.5rem;align-items:center">
+<div class="fila2"><svg viewBox="0 0 72 72" width="72" class="tema-icono" style="margin:0"><path class="hex" d="M36 3 65 19.5v33L36 69 7 52.5v-33z"/><path class="dib" d="M18 36s7-10 18-10 18 10 18 10-7 10-18 10-18-10-18-10z"/><circle class="dib" cx="36" cy="36" r="5"/></svg>
+<svg viewBox="0 0 40 40" width="48" style="color:var(--oro-2)"><path d="M20 2 36 11v18L20 38 4 29V11z" fill="none" stroke="currentColor"/><path d="M20 7 32 14v12l-12 7-12-7V14z" fill="none" stroke="currentColor" opacity=".45"/><path d="M20 12 26 20 20 28 14 20z" fill="currentColor"/></svg></div>
+<div><p style="color:var(--texto-2);margin:0">Íconos dentro de hexágonos, emblema propio y separadores dorados con rombo. Todas las imágenes son SVG (sin PNG ni JPG).</p><hr class="separador"></div></div>
+</div></body></html>

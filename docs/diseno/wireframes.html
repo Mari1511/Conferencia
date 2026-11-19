@@ -1,0 +1,91 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Wireframes — Conferencia magistral</title>
+<style>
+body{margin:0;padding:24px;background:#e9e9e9;font:13px/1.3 Arial,Helvetica,sans-serif;color:#333}
+h1{font-size:18px;margin:0 0 16px}
+.marco{width:960px;height:600px;background:#fff;border:1px solid #999;margin:0 0 28px;position:relative;display:flex;flex-direction:column}
+.marco.movil{width:300px;height:600px}
+.cap{position:absolute;top:-20px;left:0;font-weight:bold;font-size:12px}
+.nav{height:46px;border-bottom:1px solid #999;display:flex;align-items:center;gap:18px;padding:0 14px;background:#f4f4f4}
+.logo{width:110px;height:22px;background:#bbb}
+.tab{width:62px;height:10px;background:#bbb}.tab.on{background:#555}
+.btn{border:1.5px solid #555;height:30px;min-width:110px;display:grid;place-items:center;font-size:11px;background:#f4f4f4}
+.btn.p{background:#555;color:#fff}
+.der{margin-left:auto}
+.cuerpo{flex:1;padding:18px;display:grid;gap:14px}
+.caja{border:1.5px solid #999;background:#fafafa;padding:12px;position:relative}
+.t{height:12px;background:#999;margin:0 0 8px}.t.g{height:22px;background:#666}.t.s{height:8px;background:#ccc}
+.img{background:repeating-linear-gradient(45deg,#ddd 0 6px,#eee 6px 12px);border:1px solid #bbb;display:grid;place-items:center;color:#777}
+.in{height:28px;border:1px solid #999;background:#fff;margin:4px 0 10px}
+.lab{height:7px;width:40%;background:#bbb}
+.mesas{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.mesa{aspect-ratio:1;border-radius:50%;border:1.5px dashed #999;position:relative}
+.mesa:after{content:"";position:absolute;inset:30%;border-radius:50%;border:1px solid #999}
+.qr{width:150px;height:150px;margin:6px auto;background:conic-gradient(#555 0 25%,#ddd 0 50%,#555 0 75%,#ddd 0) 0 0/30px 30px;border:6px solid #fff;outline:1px solid #999}
+.fila{display:flex;gap:8px;align-items:center}
+.tabla div{height:24px;border-bottom:1px solid #ccc;display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:center}
+.tabla div span{height:7px;background:#ccc}
+.tabla div:first-child span{background:#888}
+.nota{position:absolute;right:-6px;top:-6px;background:#fffbcc;border:1px solid #c9b200;font-size:10px;padding:2px 5px}
+</style></head><body>
+<h1>Wireframes (baja fidelidad) — Conferencia magistral</h1>
+
+<div class="marco" id="w1"><span class="cap">1. Página principal</span>
+ <div class="nav"><div class="logo"></div><div class="tab on"></div><div class="tab"></div><div class="tab"></div><div class="tab"></div><div class="btn p der">RESERVAR</div></div>
+ <div class="cuerpo" style="grid-template-columns:2fr 1fr">
+  <div class="caja" style="display:flex;flex-direction:column;justify-content:flex-end"><div class="img" style="position:absolute;right:12px;top:12px;width:300px;height:300px">ilustración SVG del mapa</div>
+   <div class="t s" style="width:30%"></div><div class="t g" style="width:60%"></div><div class="t g" style="width:45%"></div><div class="t s" style="width:70%"></div><div class="t s" style="width:55%"></div>
+   <div class="fila" style="margin-top:10px"><div class="btn p">RESERVAR MI LUGAR</div><div class="btn">VER TEMAS</div></div></div>
+  <div style="display:grid;gap:14px"><div class="caja"><div class="t s" style="width:50%"></div><div class="t g" style="width:30%"></div><div class="t s"></div><span class="nota">cupo</span></div>
+   <div class="caja"><div class="t s" style="width:40%"></div><div class="fila"><div class="img" style="width:46px;height:46px"></div><div style="flex:1"><div class="t"></div><div class="t s"></div></div></div><span class="nota">ponente</span></div>
+   <div class="caja"><div class="t s" style="width:40%"></div><div class="t s"></div><div class="t s"></div><div class="t s"></div><div class="t s"></div><span class="nota">agenda</span></div></div>
+ </div></div>
+
+<div class="marco" id="w2"><span class="cap">2. Formulario de registro + 4. Selección / asignación de asientos</span>
+ <div class="nav"><div class="logo"></div><div class="tab"></div><div class="tab"></div><div class="tab on"></div><div class="tab"></div><div class="btn p der">RESERVAR</div></div>
+ <div class="cuerpo" style="grid-template-columns:300px 1fr;align-content:start">
+  <div class="caja"><div class="t s" style="width:40%"></div><div class="lab"></div><div class="in"></div><div class="lab"></div><div class="in"></div><div class="lab"></div><div class="in"></div>
+   <div class="fila"><div class="btn" style="flex:1">AUTOMÁTICA</div><div class="btn" style="flex:1">ELEGIR</div></div><div class="t s" style="margin-top:10px;width:70%"></div>
+   <div class="fila" style="margin-top:12px"><div style="width:14px;height:14px;border:1px solid #555"></div><div class="t s" style="flex:1;margin:0"></div></div>
+   <div class="btn p" style="margin-top:12px">CONFIRMAR REGISTRO</div><span class="nota">datos</span></div>
+  <div class="caja"><div class="t s" style="width:30%"></div><div class="fila" style="margin-bottom:8px"><div class="t s" style="width:60px;margin:0"></div><div class="t s" style="width:60px;margin:0"></div><div class="t s" style="width:60px;margin:0"></div></div>
+   <div class="t" style="height:18px;background:#ddd;text-align:center;font-size:10px">ESCENARIO</div>
+   <div class="mesas"><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div><div class="mesa"></div></div><span class="nota">10 mesas × 10 asientos</span></div>
+ </div></div>
+
+<div class="marco" id="w3"><span class="cap">3. Confirmación y código QR</span>
+ <div class="nav"><div class="logo"></div><div class="tab"></div><div class="tab"></div><div class="tab on"></div><div class="tab"></div><div class="btn p der">RESERVAR</div></div>
+ <div class="cuerpo" style="justify-items:center;align-content:start"><div class="caja" style="width:380px;text-align:center">
+  <div class="t s" style="width:40%;margin:0 auto 8px"></div><div class="t g" style="width:70%;margin:0 auto 8px"></div><div class="t s" style="width:30%;margin:0 auto"></div>
+  <div class="qr"></div><div class="t" style="width:45%;margin:6px auto 12px"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div class="caja" style="height:36px"></div><div class="caja" style="height:36px"></div><div class="caja" style="height:36px"></div><div class="caja" style="height:36px"></div></div>
+  <div class="btn p" style="margin-top:10px">CONFIRMAR POR WHATSAPP</div><div class="fila" style="justify-content:center;margin-top:8px"><div class="btn">IMPRIMIR</div><div class="btn">VOLVER</div></div><span class="nota">QR de acceso único</span></div></div></div>
+
+<div class="marco" id="w4"><span class="cap">5. Panel administrativo — asistentes</span>
+ <div class="nav"><div class="logo"></div><div class="tab on"></div><div class="tab"></div><div class="der fila"><div class="tab"></div><div class="btn">CERRAR SESIÓN</div></div></div>
+ <div class="cuerpo" style="align-content:start">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"><div class="caja"><div class="t s"></div><div class="t g" style="width:30%"></div></div><div class="caja"><div class="t s"></div><div class="t g" style="width:30%"></div></div><div class="caja"><div class="t s"></div><div class="t g" style="width:30%"></div></div><div class="caja"><div class="t s"></div><div class="t g" style="width:30%"></div></div></div>
+  <div class="fila"><div class="in" style="flex:1;margin:0"></div><div class="btn p">NUEVO REGISTRO</div><div class="btn">EXPORTAR CSV</div></div>
+  <div class="caja tabla"><div><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><span class="nota">editar / eliminar por fila</span></div>
+ </div></div>
+
+<div class="marco" id="w5"><span class="cap">5. Panel administrativo — control de acceso (validación de QR)</span>
+ <div class="nav"><div class="logo"></div><div class="tab"></div><div class="tab on"></div><div class="der fila"><div class="tab"></div><div class="btn">CERRAR SESIÓN</div></div></div>
+ <div class="cuerpo" style="grid-template-columns:1.3fr 1fr;align-content:start">
+  <div class="caja"><div class="t s" style="width:40%"></div><div class="img" style="height:280px">vista de la cámara</div><div class="fila" style="margin-top:10px"><div class="btn p">ACTIVAR CÁMARA</div><div class="btn">SUBIR FOTO</div></div><div class="fila" style="margin-top:10px"><div class="in" style="flex:1;margin:0"></div><div class="btn">VALIDAR</div></div></div>
+  <div style="display:grid;gap:14px;align-content:start"><div class="caja" style="text-align:center"><div class="t g" style="width:60%;margin:0 auto 8px"></div><div class="t s" style="width:80%;margin:0 auto"></div><span class="nota">válido / ya ingresó / no válido</span></div>
+   <div class="caja"><div class="t s" style="width:40%"></div><div class="t s"></div><div class="t s"></div><div class="t s"></div></div></div>
+ </div></div>
+
+<div style="display:flex;gap:28px">
+<div class="marco movil" id="w6"><span class="cap">Celular — registro</span>
+ <div class="nav" style="flex-wrap:wrap;height:auto;padding:8px"><div class="logo"></div><div class="btn p der" style="min-width:70px">RESERVAR</div><div class="fila" style="width:100%;justify-content:space-between;margin-top:8px"><div class="tab"></div><div class="tab"></div><div class="tab on"></div><div class="tab"></div></div></div>
+ <div class="cuerpo" style="align-content:start"><div class="caja"><div class="lab"></div><div class="in"></div><div class="lab"></div><div class="in"></div><div class="lab"></div><div class="in"></div></div>
+ <div class="caja"><div class="mesas" style="grid-template-columns:repeat(2,1fr)"><div class="mesa"></div><div class="mesa"></div></div></div><div class="btn p">CONFIRMAR REGISTRO</div></div></div>
+<div class="marco movil" id="w7"><span class="cap">Celular — boleto QR</span>
+ <div class="nav" style="flex-wrap:wrap;height:auto;padding:8px"><div class="logo"></div><div class="btn p der" style="min-width:70px">RESERVAR</div><div class="fila" style="width:100%;justify-content:space-between;margin-top:8px"><div class="tab"></div><div class="tab"></div><div class="tab"></div><div class="tab"></div></div></div>
+ <div class="cuerpo" style="align-content:start;text-align:center"><div class="caja"><div class="t g" style="width:80%;margin:0 auto 8px"></div><div class="qr"></div><div class="t" style="width:50%;margin:6px auto"></div><div class="btn p">WHATSAPP</div></div></div></div>
+<div class="marco movil" id="w8"><span class="cap">Celular — inicio de sesión del panel</span>
+ <div class="nav"><div class="logo"></div></div>
+ <div class="cuerpo" style="align-content:center"><div class="caja" style="text-align:center"><div class="img" style="width:46px;height:46px;margin:0 auto 10px"></div><div class="t" style="width:60%;margin:0 auto 14px"></div><div class="lab"></div><div class="in"></div><div class="lab"></div><div class="in"></div><div class="btn p">ENTRAR</div></div></div></div>
+</div>
+</body></html>

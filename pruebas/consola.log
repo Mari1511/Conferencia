@@ -1,0 +1,211 @@
+01:48:35 INFO  [Rendimiento] Consultar asientos ocupados: 1 ms
+01:48:35 INFO  [Rendimiento] Página lista: 176 ms
+01:48:36 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:37 INFO  [Rendimiento] Guardar registro: 3 ms
+01:48:37 INFO  [Rendimiento] Consultar asientos ocupados: 4 ms
+01:48:38 INFO  [Rendimiento] Consultar asientos ocupados: 68 ms
+01:48:38 INFO  [Rendimiento] Página lista: 133 ms
+01:48:38 INFO  [Rendimiento] Consultar boleto: 0 ms
+01:48:38 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:40 INFO  [Rendimiento] Guardar registro: 0 ms
+01:48:40 INFO  [Rendimiento] Consultar asientos ocupados: 2 ms
+01:48:40 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:40 INFO  [Rendimiento] Guardar registro: 1 ms
+01:48:40 ERROR [Registro] CORREO_DUPLICADO ErrorDatos: Ese correo ya tiene un lugar reservado. Recupera tu boleto en «Mi lugar».
+    at Object._insertar (http://localhost:42511/js/datos.js:126:59)
+    at Object.reservar (http://localhost:42511/js/datos.js:136:42)
+    at http://localhost:42511/js/datos.js:307:59
+    at medir (http://localhost:42511/js/datos.js:96:24)
+    at Object.reservar (http://localhost:42511/js/datos.js:307:22)
+    at HTMLFormElement.enviar (http://localhost:42511/js/app.js:103:29)
+01:48:41 INFO  [Rendimiento] Guardar registro: 0 ms
+01:48:41 ERROR [Registro] TELEFONO_DUPLICADO ErrorDatos: Ese número de WhatsApp ya tiene un lugar reservado. Recupera tu boleto en «Mi lugar».
+    at Object._insertar (http://localhost:42511/js/datos.js:127:63)
+    at Object.reservar (http://localhost:42511/js/datos.js:136:42)
+    at http://localhost:42511/js/datos.js:307:59
+    at medir (http://localhost:42511/js/datos.js:96:24)
+    at Object.reservar (http://localhost:42511/js/datos.js:307:22)
+    at HTMLFormElement.enviar (http://localhost:42511/js/app.js:103:29)
+01:48:42 INFO  [Rendimiento] Guardar registro: 0 ms
+01:48:42 INFO  [Rendimiento] Consultar asientos ocupados: 3 ms
+01:48:42 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:43 INFO  [Rendimiento] Guardar registro: 0 ms
+01:48:43 INFO  [Rendimiento] Consultar asientos ocupados: 3 ms
+01:48:45 INFO  [Rendimiento] Consultar boleto: 0 ms
+01:48:45 INFO  [Rendimiento] Cancelar registro: 0 ms
+01:48:45 INFO  [Rendimiento] Consultar asientos ocupados: 3 ms
+01:48:46 INFO  [Rendimiento] Página lista: 98 ms
+01:48:46 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:46 INFO  [Rendimiento] Página lista: 36 ms
+01:48:46 INFO  [Rendimiento] Guardar registro: 1 ms
+01:48:47 INFO  [Rendimiento] Panel: iniciar: 0 ms
+01:48:48 INFO  [Rendimiento] Panel: iniciar: 0 ms
+01:48:48 INFO  [Rendimiento] Panel: resumen: 8 ms
+01:48:48 INFO  [Rendimiento] Panel: listar: 8 ms
+01:48:48 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:48:48 INFO  [Rendimiento] Panel: listar: 1 ms
+01:48:49 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:48:49 INFO  [Rendimiento] Panel: listar: 1 ms
+01:48:49 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:50 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:50 INFO  [Rendimiento] Panel: registrar: 3 ms
+01:48:50 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:48:50 INFO  [Rendimiento] Panel: listar: 0 ms
+01:48:50 INFO  [Rendimiento] Consultar asientos ocupados: 1 ms
+01:48:50 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:50 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:50 INFO  [Rendimiento] Panel: actualizar: 1 ms
+01:48:50 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:48:50 INFO  [Rendimiento] Panel: listar: 1 ms
+01:48:50 INFO  [Rendimiento] Panel: listar: 0 ms
+01:48:50 INFO  [Rendimiento] Panel: actualizar: 0 ms
+01:48:51 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:51 INFO  [Rendimiento] Panel: eliminar: 1 ms
+01:48:51 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:48:51 INFO  [Rendimiento] Panel: listar: 1 ms
+01:48:51 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:48:52 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:52 INFO  [Rendimiento] Panel: validarQR: 3 ms
+01:48:52 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:52 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:48:52 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:52 INFO  [Rendimiento] Panel: validarQR: 1 ms
+01:48:52 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:48:52 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:52 INFO  [Rendimiento] Panel: validarQR: 1 ms
+01:48:52 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:48:53 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:53 INFO  [Rendimiento] Panel: validarQR: 1 ms
+01:48:53 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:48:53 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:55 INFO  [Rendimiento] Panel: iniciar: 0 ms
+01:48:55 INFO  [Rendimiento] Panel: resumen: 8 ms
+01:48:55 INFO  [Rendimiento] Panel: listar: 6 ms
+01:48:55 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:48:55 INFO  [Rendimiento] Panel: validarQR: 1 ms
+01:48:55 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:48:56 INFO  [Rendimiento] Consultar asientos ocupados: 1 ms
+01:48:56 INFO  [Rendimiento] Página lista: 111 ms
+01:48:58 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:48:59 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:00 INFO  [Rendimiento] Panel: iniciar: 0 ms
+01:49:00 INFO  [Rendimiento] Panel: resumen: 7 ms
+01:49:00 INFO  [Rendimiento] Panel: listar: 0 ms
+01:49:00 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:49:01 INFO  [Rendimiento] Consultar asientos ocupados: 1 ms
+01:49:01 INFO  [Rendimiento] Página lista: 72 ms
+01:49:02 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:04 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:04 INFO  [Rendimiento] Panel: iniciar: 0 ms
+01:49:04 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:49:04 INFO  [Rendimiento] Panel: listar: 0 ms
+01:49:05 INFO  [Rendimiento] Panel: accesos: 0 ms
+01:49:06 INFO  [Rendimiento] Consultar asientos ocupados: 1 ms
+01:49:06 INFO  [Rendimiento] Página lista: 87 ms
+01:49:06 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:06 INFO  [Rendimiento] Página lista: 74 ms
+01:49:06 INFO  [Rendimiento] Consultar asientos ocupados: 1 ms
+01:49:06 INFO  [Rendimiento] Página lista: 76 ms
+01:49:06 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:07 INFO  [Rendimiento] Guardar registro: 1 ms
+01:49:07 INFO  [Rendimiento] Consultar asientos ocupados: 3 ms
+01:49:08 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:08 INFO  [Rendimiento] Página lista: 69 ms
+01:49:09 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:09 INFO  [Rendimiento] Consultar asientos ocupados: 0 ms
+01:49:09 INFO  [Rendimiento] Página lista: 75 ms
+01:49:10 INFO  [Rendimiento] Panel: iniciar: 0 ms
+01:49:10 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:49:10 INFO  [Rendimiento] Panel: listar: 0 ms
+01:49:10 INFO  [Rendimiento] Panel: resumen: 0 ms
+01:49:10 INFO  [Rendimiento] Panel: listar: 1 ms
+01:49:10 INFO  [Rendimiento] Panel: cerrar: 0 ms
+01:49:10 INFO  [Rendimiento] Panel: cerrar: 1 ms
+01:49:15 INFO  [Rendimiento] Consultar asientos ocupados: 61 ms
+01:49:15 INFO  [Rendimiento] Página lista: 168 ms
+01:49:15 INFO  [Rendimiento] Consultar asientos ocupados: 24 ms
+01:49:16 INFO  [Rendimiento] Guardar registro: 17 ms
+01:49:16 INFO  [Rendimiento] Consultar asientos ocupados: 71 ms
+01:49:17 INFO  [Rendimiento] Panel: iniciar: 26 ms
+01:49:17 INFO  [Rendimiento] Panel: resumen: 22 ms
+01:49:17 INFO  [Rendimiento] Panel: listar: 21 ms
+01:49:17 INFO  [Rendimiento] Consultar asientos ocupados: 16 ms
+01:49:17 INFO  [Rendimiento] Panel: actualizar: 16 ms
+01:49:17 INFO  [Rendimiento] Panel: resumen: 17 ms
+01:49:17 INFO  [Rendimiento] Panel: listar: 16 ms
+01:49:17 INFO  [Rendimiento] Panel: accesos: 15 ms
+01:49:18 INFO  [Rendimiento] Panel: validarQR: 59 ms
+01:49:18 INFO  [Rendimiento] Panel: accesos: 37 ms
+01:49:18 INFO  [Rendimiento] Consultar asientos ocupados: 33 ms
+01:49:18 INFO  [Rendimiento] Página lista: 134 ms
+01:49:19 ERROR Failed to load resource: the server responded with a status of 400 (Bad Request)
+01:49:19 ERROR [Supabase] reservar_asiento 400 {code: P0001, message: ASIENTO_OCUPADO}
+01:49:19 INFO  [Rendimiento] Guardar registro: 14 ms
+01:49:19 ERROR [Registro] ASIENTO_OCUPADO ErrorDatos: Ese asiento acaba de ocuparse. Elige otro; el plano ya está actualizado.
+    at rpc (http://localhost:42511/js/datos.js:243:13)
+    at async medir (http://localhost:42511/js/datos.js:96:18)
+    at async HTMLFormElement.enviar (http://localhost:42511/js/app.js:103:17)
+01:49:19 INFO  [Rendimiento] Consultar asientos ocupados: 29 ms
+01:49:20 INFO  [Rendimiento] Consultar asientos ocupados: 46 ms
+01:49:20 INFO  [Rendimiento] Página lista: 119 ms
+01:49:20 INFO  [Rendimiento] Consultar asientos ocupados: 44 ms
+01:49:20 INFO  [Rendimiento] Guardar registro: 0 ms
+01:49:20 ERROR [Registro] SIN_CONEXION ErrorDatos: No hay conexión a Internet. Conéctate y vuelve a intentarlo; tus datos siguen aquí.
+    at rpc (http://localhost:42511/js/datos.js:226:34)
+    at Object.reservar (http://localhost:42511/js/datos.js:255:14)
+    at http://localhost:42511/js/datos.js:307:59
+    at medir (http://localhost:42511/js/datos.js:96:24)
+    at Object.reservar (http://localhost:42511/js/datos.js:307:22)
+    at HTMLFormElement.enviar (http://localhost:42511/js/app.js:103:29)
+01:49:21 ERROR Failed to load resource: the server responded with a status of 503 (Service Unavailable)
+01:49:21 ERROR [Supabase] asientos_ocupados 503 null
+01:49:21 INFO  [Rendimiento] Consultar asientos ocupados: 13 ms
+01:49:21 ERROR Failed to load resource: the server responded with a status of 503 (Service Unavailable)
+01:49:21 ERROR [Supabase] reservar_asiento 503 null
+01:49:21 INFO  [Rendimiento] Guardar registro: 14 ms
+01:49:21 ERROR [Registro] ERROR_SERVIDOR ErrorDatos: El servidor no respondió. Espera unos segundos y vuelve a intentarlo.
+    at rpc (http://localhost:42511/js/datos.js:243:13)
+    at async medir (http://localhost:42511/js/datos.js:96:18)
+    at async HTMLFormElement.enviar (http://localhost:42511/js/app.js:103:17)
+01:49:21 INFO  [Rendimiento] Guardar registro: 20 ms
+01:49:21 INFO  [Rendimiento] Consultar asientos ocupados: 104 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Página lista: 116 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 1 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 3 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 2 ms
+PERF  [Rendimiento] Página lista: 79 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 1 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 5 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 4 ms
+PERF  [Rendimiento] Página lista: 101 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 1 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 3 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Página lista: 86 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 1 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 3 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 5 ms
+PERF  [Rendimiento] Página lista: 95 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 1 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 2 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 2 ms
+PERF  [Rendimiento] Página lista: 1056 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 5 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 14 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 2 ms
+PERF  [Rendimiento] Página lista: 1091 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 4 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 12 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 1 ms
+PERF  [Rendimiento] Página lista: 1091 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 0 ms
+PERF  [Rendimiento] Guardar registro: 5 ms
+PERF  [Rendimiento] Consultar asientos ocupados: 14 ms

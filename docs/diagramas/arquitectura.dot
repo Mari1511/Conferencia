@@ -1,0 +1,12 @@
+digraph A { graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.5];
+ node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#f4f1ea", color="#785a28"];
+ edge [fontname="Helvetica", fontsize=9, color="#555555"];
+ u [label="Asistente\n(celular o PC)", shape=box, fillcolor="#ffffff"]; o [label="Organizador / puerta\n(navegador + cámara)", fillcolor="#ffffff"];
+ subgraph cluster_gh { label="GitHub Pages (HTTPS, archivos estáticos)"; fontname="Helvetica"; color="#999999";
+   idx [label="index.html\napp.js · sala.js"]; adm [label="admin.html\nadmin.js · jsQR"]; com [label="datos.js · comun.js\nconfig.js · qrcode"]; }
+ subgraph cluster_sb { label="Supabase"; fontname="Helvetica"; color="#999999";
+   api [label="API REST (PostgREST)\n/rest/v1/rpc/…"]; db [label="PostgreSQL\n7 tablas · RLS\n13 funciones RPC", fillcolor="#e3f4f2", color="#0a8f86"]; }
+ wa [label="WhatsApp\nwa.me", style="rounded,dashed", fillcolor="#ffffff"];
+ u -> idx; o -> adm; idx -> com; adm -> com; com -> api [label="fetch JSON\napikey pública"]; api -> db [label="SECURITY\nDEFINER"];
+ idx -> wa [label="enlace con\nmensaje"]; demo [label="localStorage\n(modo demostración)", style="rounded,dashed", fillcolor="#ffffff"]; com -> demo [style=dashed, label="si no hay\nSupabase"];
+}

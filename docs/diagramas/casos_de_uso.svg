@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="900" viewBox="0 0 1260 900" font-family="Arial, Helvetica, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10" fill="none" stroke="#333"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="200" y="30" width="780" height="850" rx="6" fill="#fafafa" stroke="#333" stroke-width="1.5"/>
+<text x="590" y="58" text-anchor="middle" font-size="17" font-weight="bold">Sistema de gestión — Conferencia magistral</text>
+<ellipse cx="400" cy="110" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="107.0" text-anchor="middle" font-size="13.5">Consultar información del</text>
+<text x="400" y="123.0" text-anchor="middle" font-size="13.5">evento</text>
+<ellipse cx="400" cy="206" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="211.0" text-anchor="middle" font-size="13.5">Consultar temas y agenda</text>
+<ellipse cx="400" cy="302" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="307.0" text-anchor="middle" font-size="13.5">Registrarse</text>
+<ellipse cx="400" cy="398" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="403.0" text-anchor="middle" font-size="13.5">Elegir asiento en el plano</text>
+<ellipse cx="400" cy="494" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="499.0" text-anchor="middle" font-size="13.5">Recibir boleto con código QR</text>
+<ellipse cx="400" cy="590" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="587.0" text-anchor="middle" font-size="13.5">Confirmar asistencia por</text>
+<text x="400" y="603.0" text-anchor="middle" font-size="13.5">WhatsApp</text>
+<ellipse cx="400" cy="686" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="691.0" text-anchor="middle" font-size="13.5">Recuperar boleto (Mi lugar)</text>
+<ellipse cx="400" cy="782" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="400" y="787.0" text-anchor="middle" font-size="13.5">Liberar su lugar</text>
+<ellipse cx="780" cy="110" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="115.0" text-anchor="middle" font-size="13.5">Iniciar sesión</text>
+<ellipse cx="780" cy="206" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="211.0" text-anchor="middle" font-size="13.5">Consultar y buscar asistentes</text>
+<ellipse cx="780" cy="302" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="307.0" text-anchor="middle" font-size="13.5">Registrar asistente</text>
+<ellipse cx="780" cy="398" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="395.0" text-anchor="middle" font-size="13.5">Modificar datos / reasignar</text>
+<text x="780" y="411.0" text-anchor="middle" font-size="13.5">asiento</text>
+<ellipse cx="780" cy="494" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="499.0" text-anchor="middle" font-size="13.5">Marcar confirmación de WhatsApp</text>
+<ellipse cx="780" cy="590" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="595.0" text-anchor="middle" font-size="13.5">Eliminar registro</text>
+<ellipse cx="780" cy="686" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="691.0" text-anchor="middle" font-size="13.5">Exportar lista a CSV</text>
+<ellipse cx="780" cy="782" rx="145.0" ry="30" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text x="780" y="787.0" text-anchor="middle" font-size="13.5">Validar código QR en la entrada</text>
+<g stroke="#222" stroke-width="2" fill="none"><circle cx="95" cy="330" r="14"/><path d="M95 344v40M71 360h48M95 384l-20 32M95 384l20 32"/></g>
+<text x="95" y="438" text-anchor="middle" font-size="15" font-weight="bold">Asistente</text>
+<g stroke="#222" stroke-width="2" fill="none"><circle cx="1160" cy="330" r="14"/><path d="M1160 344v40M1136 360h48M1160 384l-20 32M1160 384l20 32"/></g>
+<text x="1160" y="438" text-anchor="middle" font-size="15" font-weight="bold">Administrador</text>
+<text x="1160" y="455" text-anchor="middle" font-size="15" font-weight="bold">(organización)</text>
+<g stroke="#222" stroke-width="2" fill="none"><circle cx="95" cy="700" r="14"/><path d="M95 714v40M71 730h48M95 754l-20 32M95 754l20 32"/></g>
+<text x="95" y="808" text-anchor="middle" font-size="15" font-weight="bold">WhatsApp</text>
+<text x="95" y="825" text-anchor="middle" font-size="15" font-weight="bold">(sistema externo)</text>
+<line x1="120" y1="390" x2="255" y2="110" stroke="#333" stroke-width="1.2"/>
+<line x1="120" y1="390" x2="255" y2="206" stroke="#333" stroke-width="1.2"/>
+<line x1="120" y1="390" x2="255" y2="302" stroke="#333" stroke-width="1.2"/>
+<line x1="120" y1="390" x2="255" y2="686" stroke="#333" stroke-width="1.2"/>
+<line x1="120" y1="390" x2="255" y2="782" stroke="#333" stroke-width="1.2"/>
+<line x1="120" y1="390" x2="255" y2="590" stroke="#333" stroke-width="1.2"/>
+<line x1="120" y1="720" x2="255" y2="596" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="110" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="206" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="302" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="398" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="494" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="590" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="686" stroke="#333" stroke-width="1.2"/>
+<line x1="1135" y1="390" x2="925" y2="782" stroke="#333" stroke-width="1.2"/>
+<line x1="340" y1="368" x2="340" y2="332" stroke="#333" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<text x="230" y="355.0" font-size="12">«extend»</text>
+<path d="M545 302 C590 362 590 434 545 494" fill="none" stroke="#333" stroke-dasharray="6 4" marker-end="url(#a)"/>
+<text x="550" y="403.0" font-size="12">«include»</text>
+<text x="780" y="842" text-anchor="middle" font-size="12" fill="#333">Todos los casos del administrador «include» Iniciar sesión</text>
+</svg>

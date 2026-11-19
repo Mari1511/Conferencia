@@ -1,0 +1,34 @@
+                                                                 Table "public.asistentes"
+       Column        |           Type           | Collation | Nullable |           Default            | Storage  | Compression | Stats target | Description 
+---------------------+--------------------------+-----------+----------+------------------------------+----------+-------------+--------------+-------------
+ id                  | integer                  |           | not null | generated always as identity | plain    |             |              | 
+ folio               | text                     |           | not null |                              | extended |             |              | 
+ codigo_qr           | text                     |           | not null |                              | extended |             |              | 
+ nombre              | text                     |           | not null |                              | extended |             |              | 
+ correo              | text                     |           | not null |                              | extended |             |              | 
+ telefono            | text                     |           | not null |                              | extended |             |              | 
+ asiento_id          | text                     |           | not null |                              | extended |             |              | 
+ modo                | text                     |           | not null |                              | extended |             |              | 
+ confirmado_whatsapp | boolean                  |           | not null | false                        | plain    |             |              | 
+ asistio_en          | timestamp with time zone |           |          |                              | plain    |             |              | 
+ creado_en           | timestamp with time zone |           | not null | now()                        | plain    |             |              | 
+ actualizado_en      | timestamp with time zone |           | not null | now()                        | plain    |             |              | 
+Indexes:
+    "asistentes_pkey" PRIMARY KEY, btree (id)
+    "asistentes_asiento_unico" UNIQUE CONSTRAINT, btree (asiento_id)
+    "asistentes_correo_unico" UNIQUE CONSTRAINT, btree (correo)
+    "asistentes_folio_unico" UNIQUE CONSTRAINT, btree (folio)
+    "asistentes_qr_unico" UNIQUE CONSTRAINT, btree (codigo_qr)
+    "asistentes_telefono_unico" UNIQUE CONSTRAINT, btree (telefono)
+Check constraints:
+    "asistentes_correo_check" CHECK (char_length(correo) <= 120)
+    "asistentes_modo_check" CHECK (modo = ANY (ARRAY['auto'::text, 'manual'::text, 'admin'::text]))
+    "asistentes_nombre_check" CHECK (char_length(nombre) >= 3 AND char_length(nombre) <= 80)
+    "asistentes_telefono_check" CHECK (telefono ~ '^[0-9]{10}$'::text)
+Foreign-key constraints:
+    "asistentes_asiento_id_fkey" FOREIGN KEY (asiento_id) REFERENCES asientos(id)
+Referenced by:
+    TABLE "accesos" CONSTRAINT "accesos_asistente_id_fkey" FOREIGN KEY (asistente_id) REFERENCES asistentes(id) ON DELETE SET NULL
+Policies (row security enabled): (none)
+Access method: heap
+

@@ -1,0 +1,18 @@
+digraph Nav {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", nodesep=0.35, ranksep=0.7, pad=0.3];
+  node [shape=box, style="rounded,filled", fillcolor="#f4f1ea", color="#785a28", fontname="Helvetica", fontsize=11];
+  edge [color="#555555", fontname="Helvetica", fontsize=9];
+  subgraph cluster_pub { label="index.html (página pública)"; fontname="Helvetica"; color="#999999";
+    inicio [label="Inicio\n#inicio"]; temas [label="Temas\n#temas"]; registro [label="Registro + plano\n#registro"];
+    boleto [label="Boleto QR\n#boleto", fillcolor="#e3f4f2", color="#0a8f86"]; milugar [label="Mi lugar\n#mi-lugar"]; }
+  wa [label="WhatsApp\n(wa.me)", shape=box, style="rounded,dashed"];
+  subgraph cluster_adm { label="admin.html (panel)"; fontname="Helvetica"; color="#999999";
+    login [label="Iniciar sesión\n#login"]; asistentes [label="Asistentes\n#asistentes"]; editar [label="Diálogo alta /\nedición", style="rounded,dashed"];
+    eliminar [label="Diálogo eliminar", style="rounded,dashed"]; acceso [label="Control de acceso\n#acceso", fillcolor="#e3f4f2", color="#0a8f86"]; }
+  inicio -> temas [label="menú"]; inicio -> registro [label="Reservar"]; temas -> registro;
+  registro -> boleto [label="registro\nexitoso"]; milugar -> boleto [label="folio + correo"]; boleto -> wa [label="Confirmar"];
+  boleto -> inicio [label="Volver"]; inicio -> milugar [label="menú"];
+  login -> asistentes [label="credenciales\nválidas"]; asistentes -> editar; asistentes -> eliminar; asistentes -> acceso [label="pestaña"];
+  acceso -> asistentes; asistentes -> login [label="cerrar sesión /\nsesión vencida"];
+  boleto -> acceso [label="QR leído en\nla entrada", style=dotted];
+}

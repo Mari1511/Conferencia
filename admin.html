@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Panel de organización | Conferencia magistral</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#010a13">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="index.html" aria-label="Ir a la página del evento">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 36 11v18L20 38 4 29V11z" fill="none" stroke="currentColor"/><path d="M20 7 32 14v12l-12 7-12-7V14z" fill="none" stroke="currentColor" opacity=".45"/><path d="M20 12 26 20 20 28 14 20z" fill="currentColor"/></svg>
+      <span>Panel de<br>organización</span>
+    </a>
+    <nav class="pestanas" aria-label="Secciones del panel" id="pestanas-admin" hidden>
+      <a href="#asistentes">Asistentes</a>
+      <a href="#acceso">Control de acceso</a>
+    </nav>
+    <div class="barra-derecha" id="sesion-admin" hidden>
+      <span class="usuario" id="nombre-admin"></span>
+      <button type="button" class="boton" id="btn-salir">Cerrar sesión</button>
+    </div>
+  </header>
+  <div class="avisos" aria-live="polite">
+    <p class="aviso aviso-demo" id="aviso-demo" hidden>Modo demostración: usuario <code>admin</code>, contraseña <code>Conferencia2026!</code>. Los datos son los de este navegador.</p>
+    <p class="aviso aviso-red" id="aviso-red" hidden>Sin conexión a Internet.</p>
+  </div>
+
+  <main class="contenido">
+    <!-- ======================= INICIO DE SESIÓN ======================= -->
+    <section class="vista" data-vista="login" aria-labelledby="t-login" hidden>
+      <div class="panel login">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 36 11v18L20 38 4 29V11z" fill="none" stroke="currentColor"/><path d="M14 18v-3a6 6 0 0 1 12 0v3M12 18h16v11H12z" fill="none" stroke="currentColor"/></svg>
+        <h1 id="t-login">Iniciar sesión</h1>
+        <p class="ayuda">Acceso solo para el personal del evento.</p>
+        <form id="form-login" novalidate>
+          <div class="campo"><label for="usuario">Usuario</label><input id="usuario" type="text" autocomplete="username" required></div>
+          <div class="campo"><label for="clave">Contraseña</label><input id="clave" type="password" autocomplete="current-password" required></div>
+          <button type="submit" class="boton boton-principal boton-ancho" id="btn-entrar">Entrar</button>
+          <p class="mensaje" id="mensaje-login" role="alert"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ======================= ASISTENTES ======================= -->
+    <section class="vista" data-vista="asistentes" aria-labelledby="t-asistentes" hidden>
+      <header class="vista-titulo"><span class="etiqueta">Base de datos</span><h1 id="t-asistentes">Asistentes</h1></header>
+      <div class="estadisticas">
+        <div class="panel"><span class="etiqueta">Registrados</span><strong id="e-registrados">0</strong><small id="e-cupo">de 100 lugares</small></div>
+        <div class="panel"><span class="etiqueta">Lugares libres</span><strong id="e-libres">100</strong><small>disponibles</small></div>
+        <div class="panel"><span class="etiqueta">Ingresaron</span><strong id="e-asistieron">0</strong><small>validados con QR</small></div>
+        <div class="panel"><span class="etiqueta">WhatsApp</span><strong id="e-confirmados">0</strong><small>confirmaciones recibidas</small></div>
+      </div>
+      <div class="herramientas">
+        <input type="search" id="buscar" placeholder="Buscar por nombre, correo, folio o teléfono" aria-label="Buscar asistente">
+        <button type="button" class="boton boton-principal" id="btn-nuevo">Nuevo registro</button>
+        <button type="button" class="boton" id="btn-csv">Exportar CSV</button>
+      </div>
+      <div class="tabla-marco">
+        <table>
+          <thead><tr><th>Mesa</th><th>Asiento</th><th>Folio</th><th>Nombre</th><th>Correo</th><th>WhatsApp</th><th>Confirmó</th><th>Ingreso</th><th><span class="sr">Acciones</span></th></tr></thead>
+          <tbody id="tabla-cuerpo"></tbody>
+        </table>
+      </div>
+      <p class="mensaje" id="mensaje-tabla" role="status"></p>
+    </section>
+
+    <!-- ======================= CONTROL DE ACCESO ======================= -->
+    <section class="vista" data-vista="acceso" aria-labelledby="t-acceso" hidden>
+      <header class="vista-titulo"><span class="etiqueta">Entrada al recinto</span><h1 id="t-acceso">Control de acceso</h1>
+        <p>Escanea el QR del boleto con la cámara, sube una foto del código o escribe el código manualmente.</p></header>
+      <div class="acceso">
+        <div class="panel">
+          <span class="etiqueta">Lector de códigos QR</span>
+          <div class="camara" id="camara">
+            <video id="video" playsinline muted hidden></video>
+            <div class="camara-guia" id="camara-guia" hidden></div>
+            <p class="camara-texto" id="camara-texto">La cámara está apagada.</p>
+          </div>
+          <div class="fila-botones" style="margin-top:1rem">
+            <button type="button" class="boton boton-principal" id="btn-camara">Activar cámara</button>
+            <label class="boton" for="archivo-qr">Subir foto del QR</label>
+            <input type="file" id="archivo-qr" accept="image/*" hidden>
+          </div>
+          <form class="manual" id="form-manual" novalidate>
+            <input type="text" id="codigo-manual" placeholder="CMLOL-…" aria-label="Código de acceso" autocomplete="off" autocapitalize="characters">
+            <button type="submit" class="boton">Validar</button>
+          </form>
+        </div>
+        <div>
+          <div class="resultado" id="resultado" aria-live="assertive">
+            <div class="resultado-estado" id="resultado-estado">En espera</div>
+            <p id="resultado-detalle">El resultado de cada lectura aparecerá aquí.</p>
+          </div>
+          <div class="panel"><span class="etiqueta">Últimas lecturas</span><ul class="lecturas" id="lecturas"></ul></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Alta / edición -->
+  <dialog id="dlg-editar" aria-labelledby="t-editar">
+    <form id="form-editar" novalidate>
+      <h2 id="t-editar">Editar asistente</h2>
+      <div class="campo"><label for="ed-nombre">Nombre completo</label><input id="ed-nombre" name="nombre" type="text" maxlength="80" required></div>
+      <div class="campo"><label for="ed-correo">Correo</label><input id="ed-correo" name="correo" type="email" maxlength="120" required></div>
+      <div class="campo"><label for="ed-telefono">WhatsApp</label><input id="ed-telefono" name="telefono" type="tel" inputmode="numeric" maxlength="18" required></div>
+      <div class="campo"><label for="ed-asiento">Asiento</label><select id="ed-asiento" name="asiento"></select></div>
+      <label class="casilla" id="ed-confirmado-fila"><input type="checkbox" id="ed-confirmado" name="confirmado"><span>Confirmó por WhatsApp</span></label>
+      <p class="mensaje" id="mensaje-editar" role="alert"></p>
+      <div class="fila-botones"><button type="button" class="boton" id="ed-cancelar">Cancelar</button><button type="submit" class="boton boton-principal" id="ed-guardar">Guardar</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-eliminar" aria-labelledby="t-eliminar">
+    <h2 id="t-eliminar">¿Eliminar registro?</h2>
+    <p id="eliminar-texto"></p>
+    <div class="fila-botones"><button type="button" class="boton" id="el-no">Cancelar</button><button type="button" class="boton boton-peligro" id="el-si">Eliminar</button></div>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/comun.js"></script>
+  <script src="js/vendor/jsqr.min.js" defer></script>
+  <script src="js/admin.js" defer></script>
+</body>
+</html>
