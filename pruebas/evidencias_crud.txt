@@ -1,103 +1,138 @@
-=== C1. CREATE: registro con asignación automática ===
- registrado 
-------------
- t
-(1 row)
+Evidencias CRUD — salida de supabase/pruebas_crud.sql (PostgreSQL 17.5)
+Generado: 2026-11-20 00:17
 
-=== C2. CREATE: registro eligiendo asiento (mesa 5, asiento 7) ===
-   nombre   | mesa | lugar 
-------------+------+-------
- Luis Gómez | 5    | 7
-(1 row)
 
-=== R1. READ: lista de ocupados (sin datos personales) ===
-   asientos_ocupados    
-------------------------
- ["M01-A01", "M05-A07"]
-(1 row)
+=== C1. CREATE: 1 lugar, asignación automática ===
+ folio        | asiento
+--------------+---------
+ LOL-52FD8F1D | M01-A03
+(1 fila)
 
-=== R2. READ directo a la tabla con la clave pública (debe fallar) ===
+=== C2. CREATE: 3 lugares elegidos en el plano (como en el cine) ===
+ boleto | asiento | qr                            
+--------+---------+--------------------------------
+ 1      | M06-A01 | CMLOL-149FD944048EF0FBAF9DDC80
+ 2      | M06-A02 | CMLOL-B614B121F642025B6D0F74B2
+ 3      | M06-A03 | CMLOL-A893681E0EB4C21320E41D12
+(3 filas)
+
+=== C3. CREATE: persona en silla de ruedas + 1 acompañante (automático) ===
+ discapacidad | asiento | accesible
+--------------+---------+-----------
+ silla_ruedas | M01-A01 | true     
+ silla_ruedas | M01-A10 | false    
+(2 filas)
+
+=== R1. READ: asientos ocupados (sin datos personales) ===
+ asientos_ocupados                                            
+---------------------------------------------------------------
+ ["M01-A01","M01-A03","M01-A10","M06-A01","M06-A02","M06-A03"]
+(1 fila)
+
+=== R2. READ directo a las tablas con la clave pública (debe fallar) ===
 ERROR:  permission denied for table asistentes
-=== X1. RESTRICCIÓN: correo duplicado ===
-ERROR:  CORREO_DUPLICADO
-=== X2. RESTRICCIÓN: teléfono duplicado ===
-ERROR:  TELEFONO_DUPLICADO
-=== X3. RESTRICCIÓN: asiento ocupado ===
-ERROR:  ASIENTO_OCUPADO
-=== X4. RESTRICCIÓN: datos inválidos ===
+ERROR:  permission denied for table boletos
+
+=== X1. RESTRICCIÓN: lugar accesible sin indicar discapacidad (debe fallar) ===
+ERROR:  ACCESIBLE_NO_PERMITIDO
+
+=== X2. RESTRICCIÓN: más de un lugar accesible por registro (debe fallar) ===
+ERROR:  ACCESIBLES_EXCEDIDOS
+
+=== X3. RESTRICCIÓN: discapacidad «otra» sin describir (debe fallar) ===
 ERROR:  DATOS_INVALIDOS
-=== A1. Panel: clave incorrecta ===
+
+=== X4. RESTRICCIÓN: más de 5 lugares (debe fallar) ===
+ERROR:  DATOS_INVALIDOS
+
+=== X5. RESTRICCIÓN: asiento ocupado (debe fallar) ===
+ERROR:  ASIENTO_OCUPADO
+
+=== X6. RESTRICCIÓN: correo duplicado (debe fallar) ===
+ERROR:  CORREO_DUPLICADO
+
+=== X7. RESTRICCIÓN: teléfono duplicado (debe fallar) ===
+ERROR:  TELEFONO_DUPLICADO
+
+=== X8. RESTRICCIÓN: correo que no es Gmail y datos inválidos (debe fallar) ===
+ERROR:  DATOS_INVALIDOS
+
+=== A1. Panel: clave incorrecta (debe fallar) ===
 ERROR:  CREDENCIALES_INVALIDAS
-=== A2. Panel: sin sesión ===
+
+=== A2. Panel: sin sesión (debe fallar) ===
 ERROR:  SESION_INVALIDA
+
 === A3. Panel: inicio de sesión correcto ===
- largo_token 
+ largo_token
 -------------
-          48
-(1 row)
+ 48         
+(1 fila)
 
-=== R3. READ (panel): asistentes registrados ===
- id |    folio     |   nombre   | mesa | lugar 
-----+--------------+------------+------+-------
- 1  | LOL-15BD3D6C | Ana López  | 1    | 1
- 2  | LOL-08ABE812 | Luis Gómez | 5    | 7
-(2 rows)
+=== R3. READ (panel): registros con sus lugares ===
+ id | folio        | nombre        | discapacidad | lugares                  
+----+--------------+---------------+--------------+---------------------------
+ 3  | LOL-9BAD1FFD | Lucía Mendoza | silla_ruedas | M01-A01, M01-A10         
+ 1  | LOL-52FD8F1D | Ana López     |              | M01-A03                  
+ 2  | LOL-23F74AB3 | Grupo Ruiz    |              | M06-A01, M06-A02, M06-A03
+(3 filas)
 
-=== U1. UPDATE (panel): cambiar a Luis a la mesa 2, asiento 3 y marcar WhatsApp ===
-     nombre      | asiento | whatsapp 
------------------+---------+----------
- Luis Gómez Ruiz | M02-A03 | true
-(1 row)
+=== U1. UPDATE (panel): mover el boleto 3 del Grupo Ruiz a M02-A05 y marcar WhatsApp ===
+ nombre     | whatsapp | lugares                  
+------------+----------+---------------------------
+ Grupo Ruiz | true     | M06-A01, M06-A02, M02-A05
+(1 fila)
 
 === U2. UPDATE (panel): mover a un asiento ocupado (debe fallar) ===
 ERROR:  ASIENTO_OCUPADO
-=== Q1. QR único por asistente: validar en la entrada ===
- primera_lectura 
------------------
- VALIDO
-(1 row)
 
- segunda_lectura 
------------------
- YA_INGRESO
-(1 row)
+=== U3. UPDATE (panel): quitar la discapacidad conservando el lugar accesible (debe fallar) ===
+ERROR:  ACCESIBLE_NO_PERMITIDO
 
- qr_inventado 
+=== Q1. QR único por boleto: validar en la entrada ===
+ primera_lectura
+-----------------
+ VALIDO         
+(1 fila)
+ segunda_lectura
+-----------------
+ YA_INGRESO     
+(1 fila)
+ qr_inventado
 --------------
- NO_VALIDO
-(1 row)
+ NO_VALIDO   
+(1 fila)
 
 === R4. READ (panel): resumen ===
-                             admin_resumen                              
-------------------------------------------------------------------------
- {"cupo" : 100, "registrados" : 2, "asistieron" : 1, "confirmados" : 1}
-(1 row)
+ admin_resumen                                                                               
+----------------------------------------------------------------------------------------------
+ {"cupo":100,"ocupados":6,"registros":3,"asistieron":1,"confirmados":1,"accesibles_libres":7}
+(1 fila)
 
-=== D1. DELETE (panel): eliminar a Luis ===
- eliminado 
------------
- t
-(1 row)
-
- registrados_despues 
----------------------
- 1
-(1 row)
-
-=== D2. DELETE (asistente): cancelar con folio y correo equivocado (debe fallar) ===
-ERROR:  NO_ENCONTRADO
 === R5. READ (panel): bitácora de accesos ===
- resultado  |  nombre   
-------------+-----------
- NO_VALIDO  | 
- YA_INGRESO | Ana López
- VALIDO     | Ana López
-(3 rows)
+ resultado  | nombre     | boleto | de
+------------+------------+--------+----
+ NO_VALIDO  |            |        |   
+ YA_INGRESO | Grupo Ruiz | 2      | 3 
+ VALIDO     | Grupo Ruiz | 2      | 3 
+(3 filas)
+
+=== D1. DELETE (asistente): cancelar con folio y correo equivocado (debe fallar) ===
+ERROR:  NO_ENCONTRADO
+
+=== D2. DELETE (panel): eliminar al Grupo Ruiz (libera sus 3 lugares) ===
+ eliminado
+-----------
+ true     
+(1 fila)
+ ocupados_despues
+------------------
+ 3               
+(1 fila)
 
 === A4. Cerrar sesión y volver a usar el token (debe fallar) ===
- admin_cerrar_sesion 
+ admin_cerrar_sesion
 ---------------------
- t
-(1 row)
-
+ true               
+(1 fila)
 ERROR:  SESION_INVALIDA

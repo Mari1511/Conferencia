@@ -1,8 +1,8 @@
 /* ==========================================================================
    compartir.js — Confirmaciones para el asistente
    --------------------------------------------------------------------------
-   • imagenBoleto(r)   → genera el boleto como imagen PNG (canvas) con su QR
-   • compartir(r, img) → comparte la imagen por WhatsApp (menú de compartir
+   • imagenesBoletos(r) → genera una imagen PNG (canvas) por boleto, con su QR
+   • compartir(r, imgs) → comparte las imágenes por WhatsApp (menú de compartir
                          del celular) o la descarga y abre WhatsApp en PC
    • enviarCorreo(r)   → envía la confirmación al correo del asistente con
                          EmailJS (sin servidor propio; ver config.js → correo)
@@ -19,11 +19,15 @@
     return `https://wa.me/${CFG.whatsapp.numeroOrganizador}?text=${encodeURIComponent(texto)}`;
   }
 
+  const listaLugares = (r, sep) => r.boletos.map((b) => `Mesa ${b.mesa}, asiento ${b.lugar}${b.accesible ? ' ♿' : ''}`).join(sep);
+
   function textoBoleto(r) {
+    const n = r.boletos.length;
     return [
-      `✅ Mi lugar para la conferencia magistral «${EV.titulo}» está confirmado.`,
+      n === 1 ? `✅ Mi lugar para la conferencia magistral «${EV.titulo}» está confirmado.`
+              : `✅ Nuestros ${n} lugares para la conferencia magistral «${EV.titulo}» están confirmados.`,
       `👤 ${r.nombre}`,
-      `🪑 Mesa ${r.mesa}, asiento ${r.lugar}`,
+      `🪑 ${listaLugares(r, ' · ')}`,
       `🎫 Folio: ${r.folio}`,
       `📅 ${EV.fecha}, ${EV.hora}`,
       `📍 ${EV.lugar}, ${EV.direccion}`
@@ -79,7 +83,18 @@
       if (q.isDark(f, c)) ctx.fillRect(ox + (c + margen) * celda, oy + (f + margen) * celda, celda, celda);
   }
 
-  async function imagenBoleto(r) {
+  /** Una imagen por boleto (cada persona del grupo entra con la suya) */
+  async function imagenesBoletos(r) {
+    const n = r.boletos.length;
+    const lista = [];
+    for (const b of r.boletos) {
+      const blob = await imagenBoleto(r, b);
+      lista.push({ blob, nombre: n > 1 ? `boleto-${r.folio}-${b.numero}de${n}.png` : `boleto-${r.folio}.png` });
+    }
+    return lista;
+  }
+
+  async function imagenBoleto(r, b) {
     try { await Promise.all([document.fonts.load(`40px ${TITULO}`), document.fonts.load(`600 40px ${TEXTO}`), document.fonts.load(`40px ${TEXTO}`)]); }
     catch (e) { /* se usan fuentes del sistema */ }
     const cv = document.createElement('canvas');
@@ -98,13 +113,17 @@
     centrado(ctx, (EV.nombre || 'Conferencia magistral').toUpperCase(), y, `30px ${TITULO}`, C.oro2);
     y = centrado(ctx, EV.titulo, y + 70, `56px ${TITULO}`, C.oro1, ANCHO - 200, 64);
     separador(ctx, y + 55);
-    centrado(ctx, 'REGISTRO CONFIRMADO', y + 125, `600 30px ${TEXTO}`, C.turquesa);
-    centrado(ctx, `Mesa ${r.mesa} · Asiento ${r.lugar}`, y + 210, `78px ${TITULO}`, C.oro1);
-    y = centrado(ctx, r.nombre, y + 275, `40px ${TEXTO}`, C.texto2, ANCHO - 200, 48);
+    const n = r.boletos.length;
+    const estado = n > 1 ? `REGISTRO CONFIRMADO · BOLETO ${b.numero} DE ${n}` : 'REGISTRO CONFIRMADO';
+    centrado(ctx, estado, y + 125, `600 30px ${TEXTO}`, C.turquesa);
+    centrado(ctx, `Mesa ${b.mesa} · Asiento ${b.lugar}`, y + 210, `78px ${TITULO}`, C.oro1);
+    const titular = n > 1 ? `${r.nombre}${b.numero > 1 ? ' · acompañante' : ''}` : r.nombre;
+    y = centrado(ctx, titular, y + 275, `40px ${TEXTO}`, C.texto2, ANCHO - 200, 48);
+    if (b.accesible) { y += 52; centrado(ctx, '♿ LUGAR ACCESIBLE', y, `600 32px ${TEXTO}`, '#6fa8ff'); }
 
-    const lado = 440;
+    const lado = b.accesible ? 400 : 440;
     const qy = y + 50;
-    qr(ctx, r.codigo_qr, (ANCHO - lado) / 2, qy, lado);
+    qr(ctx, b.codigo_qr, (ANCHO - lado) / 2, qy, lado);
     centrado(ctx, r.folio, qy + lado + 70, `600 44px ${TEXTO}`, C.oro2);
     separador(ctx, qy + lado + 120);
     centrado(ctx, `${EV.fecha} · ${EV.hora}`, qy + lado + 190, `36px ${TEXTO}`, C.oro1);
@@ -127,22 +146,23 @@
    * porque el menú de compartir del celular exige un gesto del usuario.
    * Devuelve 'compartido', 'cancelado' o 'descargado'.
    */
-  async function compartir(r, blob) {
-    const nombre = `boleto-${r.folio}.png`;
+  async function compartir(r, imagenes) {
     const texto = textoBoleto(r);
-    const archivo = new File([blob], nombre, { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+    const varios = imagenes.length > 1;
+    const archivos = imagenes.map((i) => new File([i.blob], i.nombre, { type: 'image/png' }));
+    if (navigator.canShare && navigator.canShare({ files: archivos })) {
       try {
-        await navigator.share({ files: [archivo], text: texto, title: 'Mi boleto' });
+        await navigator.share({ files: archivos, text: texto, title: varios ? 'Mis boletos' : 'Mi boleto' });
         return 'compartido';
       } catch (e) {
         if (e.name === 'AbortError') return 'cancelado';
         console.warn('[Compartir]', e);
       }
     }
-    // Computadora o navegador sin «compartir archivos»: se descarga y se abre WhatsApp con el texto
-    descargar(blob, nombre);
-    window.open(`https://wa.me/?text=${encodeURIComponent(texto + '\n\n(Te adjunto la imagen de mi boleto)')}`, '_blank', 'noopener');
+    // Computadora o navegador sin «compartir archivos»: se descargan y se abre WhatsApp con el texto
+    imagenes.forEach((i, n) => setTimeout(() => descargar(i.blob, i.nombre), n * 400));
+    const nota = varios ? '(Te adjunto las imágenes de los boletos)' : '(Te adjunto la imagen de mi boleto)';
+    window.open(`https://wa.me/?text=${encodeURIComponent(texto + '\n\n' + nota)}`, '_blank', 'noopener');
     return 'descargado';
   }
 
@@ -167,10 +187,13 @@
           to_email: r.correo,
           to_name: r.nombre,
           evento: EV.titulo,
-          mesa: r.mesa,
-          asiento: r.lugar,
+          cantidad: r.boletos.length,
+          lugares: listaLugares(r, '\n'),
+          mesa: r.boletos[0].mesa,
+          asiento: r.boletos[0].lugar,
           folio: r.folio,
-          codigo: r.codigo_qr,
+          codigos: r.boletos.map((b) => `Boleto ${b.numero} (mesa ${b.mesa}, asiento ${b.lugar}): ${b.codigo_qr}`).join('\n'),
+          accesibilidad: r.discapacidad ? `${(CFG.discapacidades || {})[r.discapacidad] || r.discapacidad}${r.discapacidad_detalle ? ' — ' + r.discapacidad_detalle : ''}` : 'No solicitada',
           fecha: EV.fecha,
           hora: EV.hora,
           lugar: `${EV.lugar}, ${EV.direccion}`,
@@ -182,5 +205,5 @@
     if (!resp.ok) throw new Error('No se pudo enviar el correo (' + resp.status + ').');
   }
 
-  window.Compartir = { enlaceContacto, textoBoleto, imagenBoleto, compartir, descargar, enviarCorreo, correoActivo };
+  window.Compartir = { enlaceContacto, textoBoleto, imagenBoleto, imagenesBoletos, compartir, descargar, enviarCorreo, correoActivo };
 })();

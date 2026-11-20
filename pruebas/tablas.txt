@@ -1,12 +1,22 @@
-              List of relations
- Schema |      Name       | Type  |  Owner   
---------+-----------------+-------+----------
- public | accesos         | table | postgres
- public | administradores | table | postgres
- public | asientos        | table | postgres
- public | asistentes      | table | postgres
- public | evento          | table | postgres
- public | mesas           | table | postgres
- public | sesiones_admin  | table | postgres
-(7 rows)
+Tablas de la base de datos (schema.sql v2)
 
+ tabla           | columnas
+-----------------+----------
+ accesos         | 6       
+ administradores | 5       
+ asientos        | 4       
+ asistentes      | 11      
+ boletos         | 7       
+ evento          | 11      
+ mesas           | 3       
+ sesiones_admin  | 4       
+(8 filas)
+
+Datos iniciales
+
+ tabla    | registros         
+----------+--------------------
+ asientos | 100 (8 accesibles)
+ mesas    | 10                
+ evento   | 1                 
+(3 filas)

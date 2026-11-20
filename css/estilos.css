@@ -230,7 +230,7 @@ code { background: var(--gris-1); padding: 0 0.3em; font-size: 0.9em; }
 .campo { margin-bottom: 1rem; }
 .campo label, .grupo-titulo { display: block; margin-bottom: 0.35rem; font: 400 0.7rem var(--f-titulo); letter-spacing: 0.14em; text-transform: uppercase; color: var(--texto-2); }
 .opcional { text-transform: none; letter-spacing: 0; font-family: var(--f-texto); color: var(--texto-3); }
-input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="search"], select {
+input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="search"], input[type="number"], select, textarea {
   width: 100%; min-height: 2.7rem; padding: 0.55rem 0.75rem;
   font: inherit; font-size: 1rem; color: var(--oro-1);
   background: rgba(1, 10, 19, 0.9); border: 1px solid var(--gris-2); border-radius: 0;
@@ -240,9 +240,21 @@ select { appearance: none; -webkit-appearance: none; padding-right: 2rem;
   background-image: linear-gradient(45deg, transparent 50%, var(--oro-2) 50%), linear-gradient(135deg, var(--oro-2) 50%, transparent 50%);
   background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
 input::placeholder { color: var(--texto-3); }
-input:hover, select:hover { border-color: var(--oro-4); }
-input:focus, select:focus { outline: none; border-color: var(--oro-2); box-shadow: 0 0 8px -2px rgba(200, 170, 110, 0.6); }
-input[aria-invalid="true"] { border-color: var(--rojo); }
+input:hover, select:hover, textarea:hover { border-color: var(--oro-4); }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--oro-2); box-shadow: 0 0 8px -2px rgba(200, 170, 110, 0.6); }
+input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: var(--rojo); }
+textarea { resize: vertical; min-height: 3.5rem; line-height: 1.4; }
+/* Contador de lugares */
+.contador { display: grid; grid-template-columns: 2.7rem 1fr 2.7rem; gap: 0.4rem; max-width: 12rem; }
+.contador input { text-align: center; font-weight: 600; -moz-appearance: textfield; }
+.contador input::-webkit-inner-spin-button, .contador input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.contador-btn { min-height: 2.7rem; padding: 0; font: 600 1.2rem/1 var(--f-texto); letter-spacing: 0; }
+/* Accesibilidad */
+.accesibilidad { margin-bottom: 1rem; padding: 0.85rem 0.9rem 0.1rem; border: 1px solid rgba(80, 140, 255, 0.35); background: rgba(40, 90, 200, 0.06); }
+.accesibilidad legend { padding: 0 0.35rem; }
+.accesibilidad .casilla { color: var(--oro-1); margin-bottom: 0.85rem; }
+#campos-discapacidad .ayuda:last-child { margin-bottom: 0.85rem; }
+.icono-acc { color: #8fb8ff; }
 .ayuda { color: var(--texto-3); font-size: 0.82rem; margin: 0.3rem 0 0; }
 .error { color: #ff8a9b; font-size: 0.85rem; margin: 0.3rem 0 0; }
 .error:empty { display: none; }
@@ -270,6 +282,7 @@ fieldset { border: 0; padding: 0; margin: 0 0 0.5rem; min-width: 0; }
 .punto-ocupado { background: #3a1018; border-color: #8c2a3a; }
 .punto-elegido { background: var(--oro-2); border-color: var(--oro-2); }
 .punto-propio { background: var(--turquesa); border-color: var(--turquesa); }
+.punto-accesible { background: #10306b; border-color: #6fa8ff; }
 .escenario { margin-bottom: 1.25rem; padding-bottom: 0.5rem; text-align: center; font: 400 0.7rem var(--f-titulo); letter-spacing: 0.4em; text-transform: uppercase; color: var(--oro-2);
   border-bottom: 1px solid var(--oro-4); background: linear-gradient(0deg, rgba(200, 170, 110, 0.1), transparent); }
 .sala { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: 0.3rem 0.6rem; }
@@ -289,10 +302,19 @@ fieldset { border: 0; padding: 0; margin: 0 0 0.5rem; min-width: 0; }
 .asiento.ocupado { background: #3a1018; border-color: #8c2a3a; color: transparent; cursor: not-allowed; }
 .asiento.elegido { background: var(--oro-2); border-color: var(--oro-1); color: var(--noche); box-shadow: 0 0 10px rgba(200, 170, 110, 0.8); }
 .asiento.propio { background: var(--turquesa); border-color: #a3f5ee; color: var(--noche); box-shadow: 0 0 10px rgba(10, 200, 185, 0.7); }
+/* Lugares accesibles: azul con el símbolo ♿; bloqueados si no se indicó discapacidad */
+.asiento svg { width: 72%; height: 72%; fill: currentColor; pointer-events: none; }
+.asiento.accesible { background: #10306b; border-color: #6fa8ff; color: #cfe0ff; }
+.asiento.accesible:hover:not(:disabled) { border-color: #cfe0ff; color: #fff; box-shadow: 0 0 8px rgba(111, 168, 255, 0.8); }
+.asiento.accesible.bloqueado { opacity: 0.75; cursor: not-allowed; }
+.asiento.accesible.elegido { background: var(--oro-2); border-color: #6fa8ff; color: var(--noche); box-shadow: 0 0 10px rgba(111, 168, 255, 0.9); }
+.asiento.accesible.ocupado { background: #3a1018; border-color: #8c2a3a; color: #8c2a3a; }
+.asiento.accesible.propio { background: var(--turquesa); color: var(--noche); }
+.asiento.apagado { opacity: 0.4; }
 .cargando { color: var(--texto-2); }
 
 /* ---------- BOLETO (confirmación) ---------- */
-.boleto { max-width: 30rem; margin: 0 auto; text-align: center; padding: 2.25rem 1.75rem; }
+.boleto { max-width: 36rem; margin: 0 auto; text-align: center; padding: 2.25rem 1.75rem; }
 .boleto::before, .boleto::after { content: ""; position: absolute; left: 50%; width: 9px; height: 9px; transform: translateX(-50%) rotate(45deg); background: var(--oro-2); }
 .boleto::before { top: -5px; } .boleto::after { bottom: -5px; }
 .boleto-estado { color: var(--turquesa); }
@@ -307,6 +329,15 @@ fieldset { border: 0; padding: 0; margin: 0 0 0.5rem; min-width: 0; }
 .boleto-datos dd { margin: 0.2rem 0 0; font-size: 0.9rem; overflow-wrap: anywhere; }
 .boleto .acciones { justify-content: center; }
 .boleto .boton-whatsapp { flex: 1 1 100%; }
+.boleto-accesible { display: inline-block; margin: 0.75rem 0 0; padding: 0.35rem 0.7rem; border: 1px solid rgba(111, 168, 255, 0.5); color: #cfe0ff; font-size: 0.88rem; background: rgba(40, 90, 200, 0.12); }
+.boletos { display: grid; gap: 1rem; margin: 1rem 0 0; }
+.boletos.varios { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.boleto-qr { padding: 0.9rem 0.75rem 0.4rem; border: 1px solid var(--oro-5); }
+.boletos:not(.varios) .boleto-qr { border: 0; padding: 0; }
+.boletos:not(.varios) .boleto-qr .etiqueta, .boletos:not(.varios) .boleto-qr strong { display: none; }
+.boleto-qr strong { display: block; margin-top: 0.3rem; font: 400 0.95rem var(--f-titulo); letter-spacing: 0.08em; text-transform: uppercase; }
+.boleto-qr.es-accesible { border-color: rgba(111, 168, 255, 0.55); }
+.boletos.varios .qr-marco { width: 10.5rem; margin-top: 0.9rem; }
 .qr-whatsapp { margin-top: 1rem; }
 .qr-whatsapp summary { cursor: pointer; color: var(--texto-2); font-size: 0.85rem; list-style: none; }
 .qr-whatsapp summary::-webkit-details-marker { display: none; }
@@ -347,6 +378,8 @@ th { position: sticky; top: 0; text-align: left; padding: 0.7rem 0.8rem; font: 4
 td { padding: 0.6rem 0.8rem; border-bottom: 1px solid rgba(70, 55, 20, 0.45); color: var(--oro-1); vertical-align: middle; }
 tr:hover td { background: rgba(200, 170, 110, 0.04); }
 td.secundario { color: var(--texto-2); }
+td.accesible { color: #cfe0ff; }
+.ed-asientos { display: grid; gap: 0.5rem; }
 .insignia { display: inline-block; padding: 0.15rem 0.5rem; font-size: 0.72rem; border: 1px solid; }
 .insignia-si { color: var(--turquesa); border-color: rgba(10, 200, 185, 0.5); }
 .insignia-no { color: var(--texto-3); border-color: var(--gris-2); }

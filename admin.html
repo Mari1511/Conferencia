@@ -49,8 +49,8 @@
     <section class="vista" data-vista="asistentes" aria-labelledby="t-asistentes" hidden>
       <header class="vista-titulo"><span class="etiqueta">Base de datos</span><h1 id="t-asistentes">Asistentes</h1></header>
       <div class="estadisticas">
-        <div class="panel"><span class="etiqueta">Registrados</span><strong id="e-registrados">0</strong><small id="e-cupo">de 100 lugares</small></div>
-        <div class="panel"><span class="etiqueta">Lugares libres</span><strong id="e-libres">100</strong><small>disponibles</small></div>
+        <div class="panel"><span class="etiqueta">Lugares ocupados</span><strong id="e-registrados">0</strong><small id="e-cupo">de 100 lugares</small></div>
+        <div class="panel"><span class="etiqueta">Lugares libres</span><strong id="e-libres">100</strong><small id="e-accesibles">disponibles</small></div>
         <div class="panel"><span class="etiqueta">Ingresaron</span><strong id="e-asistieron">0</strong><small>validados con QR</small></div>
         <div class="panel"><span class="etiqueta">WhatsApp</span><strong id="e-confirmados">0</strong><small>confirmaciones recibidas</small></div>
       </div>
@@ -61,7 +61,7 @@
       </div>
       <div class="tabla-marco">
         <table>
-          <thead><tr><th>Mesa</th><th>Asiento</th><th>Folio</th><th>Nombre</th><th>Correo</th><th>WhatsApp</th><th>Confirmó</th><th>Ingreso</th><th><span class="sr">Acciones</span></th></tr></thead>
+          <thead><tr><th>Lugares</th><th>Folio</th><th>Nombre</th><th>Correo</th><th>WhatsApp</th><th>Accesibilidad</th><th>Confirmó</th><th>Ingreso</th><th><span class="sr">Acciones</span></th></tr></thead>
           <tbody id="tabla-cuerpo"></tbody>
         </table>
       </div>
@@ -108,7 +108,13 @@
       <div class="campo"><label for="ed-nombre">Nombre completo</label><input id="ed-nombre" name="nombre" type="text" maxlength="80" required></div>
       <div class="campo"><label for="ed-correo">Correo</label><input id="ed-correo" name="correo" type="email" maxlength="120" placeholder="nombre@gmail.com" required></div>
       <div class="campo"><label for="ed-telefono">WhatsApp</label><input id="ed-telefono" name="telefono" type="tel" inputmode="numeric" maxlength="18" required></div>
-      <div class="campo"><label for="ed-asiento">Asiento</label><select id="ed-asiento" name="asiento"></select></div>
+      <div class="campo" id="ed-cantidad-fila"><label for="ed-cantidad">Cantidad de lugares</label><input id="ed-cantidad" name="cantidad" type="number" min="1" max="5" value="1"></div>
+      <label class="casilla"><input type="checkbox" id="ed-accesible" name="accesible"><span>Requiere lugar accesible ♿ (discapacidad)</span></label>
+      <div id="ed-campos-discapacidad" hidden>
+        <div class="campo"><label for="ed-discapacidad">Tipo de discapacidad</label><select id="ed-discapacidad" name="discapacidad"><option value="">Elige una opción…</option></select></div>
+        <div class="campo"><label for="ed-detalle">Detalles <span class="opcional">(obligatorio si es «Otra»)</span></label><textarea id="ed-detalle" name="discapacidad_detalle" rows="2" maxlength="200"></textarea></div>
+      </div>
+      <fieldset class="campo"><legend class="grupo-titulo">Asientos</legend><div class="ed-asientos" id="ed-asientos"></div></fieldset>
       <label class="casilla" id="ed-confirmado-fila"><input type="checkbox" id="ed-confirmado" name="confirmado"><span>Confirmó por WhatsApp</span></label>
       <p class="mensaje" id="mensaje-editar" role="alert"></p>
       <div class="fila-botones"><button type="button" class="boton" id="ed-cancelar">Cancelar</button><button type="submit" class="boton boton-principal" id="ed-guardar">Guardar</button></div>

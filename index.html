@@ -123,7 +123,7 @@
       <header class="vista-titulo">
         <span class="etiqueta">Registro de asistentes</span>
         <h1 id="t-registro">Reserva tu lugar</h1>
-        <p>100 lugares en 10 mesas. Puedes dejar que el sistema te asigne el primero libre o elegirlo en el plano.</p>
+        <p>100 lugares en 10 mesas. Indica cuántos lugares necesitas y deja que el sistema los asigne juntos o elígelos en el plano. Los lugares azules ♿ están reservados para personas con discapacidad.</p>
       </header>
       <ol class="pasos" aria-label="Pasos"><li class="actual">Datos</li><li class="actual">Lugar</li><li>Boleto QR</li></ol>
 
@@ -147,12 +147,45 @@
             <p class="ayuda" id="ayuda-telefono">Para la confirmación. Si escribes la lada 52, la quitamos.</p>
             <p class="error" id="error-telefono"></p>
           </div>
+          <div class="campo">
+            <span class="grupo-titulo" id="t-cantidad">¿Cuántos lugares?</span>
+            <div class="contador" role="group" aria-labelledby="t-cantidad">
+              <button type="button" class="boton contador-btn" id="cantidad-menos" aria-label="Un lugar menos">−</button>
+              <input id="cantidad" name="cantidad" type="number" inputmode="numeric" min="1" max="5" value="1" aria-describedby="ayuda-cantidad error-cantidad">
+              <button type="button" class="boton contador-btn" id="cantidad-mas" aria-label="Un lugar más">+</button>
+            </div>
+            <p class="ayuda" id="ayuda-cantidad">Tú y tus acompañantes. Cada lugar tiene su propio boleto con QR.</p>
+            <p class="error" id="error-cantidad"></p>
+          </div>
+
+          <fieldset class="accesibilidad">
+            <legend class="grupo-titulo">Accesibilidad</legend>
+            <label class="casilla"><input type="checkbox" id="requiere-accesible" name="requiere_accesible" aria-controls="campos-discapacidad">
+              <span>Requiero un lugar accesible <span class="icono-acc" aria-hidden="true">♿</span> por discapacidad</span></label>
+            <div id="campos-discapacidad" hidden>
+              <div class="campo">
+                <label for="discapacidad">Tipo de discapacidad</label>
+                <select id="discapacidad" name="discapacidad" aria-describedby="error-discapacidad">
+                  <option value="">Elige una opción…</option>
+                </select>
+                <p class="error" id="error-discapacidad"></p>
+              </div>
+              <div class="campo">
+                <label for="discapacidad_detalle">Detalles o apoyo que necesitas <span class="opcional" id="detalle-opcional">(opcional)</span></label>
+                <textarea id="discapacidad_detalle" name="discapacidad_detalle" rows="2" maxlength="200" aria-describedby="error-discapacidad_detalle"></textarea>
+                <p class="error" id="error-discapacidad_detalle"></p>
+              </div>
+              <p class="ayuda">Te apartaremos uno de los lugares azules del plano, cerca del escenario. El personal de la entrada sabrá cómo apoyarte.</p>
+            </div>
+          </fieldset>
+
           <fieldset class="modo">
-            <legend class="grupo-titulo">Asignación de lugar</legend>
+            <legend class="grupo-titulo">Asignación de lugares</legend>
             <label class="opcion"><input type="radio" name="modo" value="auto" checked>Automática</label>
             <label class="opcion"><input type="radio" name="modo" value="manual">Elegir</label>
           </fieldset>
           <p class="resumen" id="resumen" aria-live="polite">Te asignaremos el primer lugar libre.</p>
+          <p class="error" id="error-asientos"></p>
         </div>
 
         <div class="panel col-sala">
@@ -160,6 +193,7 @@
           <div class="leyenda" aria-hidden="true">
             <span><i class="punto"></i>Libre</span><span><i class="punto punto-ocupado"></i>Ocupado</span>
             <span><i class="punto punto-elegido"></i>Elegido</span><span><i class="punto punto-propio"></i>Tuyo</span>
+            <span><i class="punto punto-accesible"></i>Accesible ♿ (personas con discapacidad)</span>
           </div>
           <div class="escenario">Escenario</div>
           <div class="sala" id="sala" role="group" aria-label="Plano: 10 mesas de 10 asientos"></div>
@@ -180,15 +214,16 @@
     <section class="vista" data-vista="boleto" aria-labelledby="t-boleto" hidden>
       <article class="panel boleto" id="boleto">
         <span class="etiqueta boleto-estado">Registro confirmado</span>
-        <h1 class="boleto-lugar" id="t-boleto">Mesa <span id="b-mesa">0</span> · Asiento <span id="b-lugar">0</span></h1>
+        <h1 class="boleto-lugar" id="t-boleto">Mesa 0 · Asiento 0</h1>
         <p class="boleto-nombre" id="b-nombre"></p>
-        <div class="qr-marco" id="qr-acceso" role="img" aria-label="Código QR de acceso"></div>
         <div class="folio" id="b-folio">LOL-00000000</div>
+        <p class="boleto-accesible" id="b-accesible" hidden></p>
+        <div class="boletos" id="b-boletos"></div>
         <dl class="boleto-datos">
           <div><dt>Fecha</dt><dd data-config="evento.fecha"></dd></div>
           <div><dt>Hora</dt><dd data-config="evento.hora"></dd></div>
           <div><dt>Lugar</dt><dd data-config="evento.lugar"></dd></div>
-          <div><dt>Acceso</dt><dd>Muestra este QR en la entrada</dd></div>
+          <div><dt>Acceso</dt><dd id="b-acceso">Muestra este QR en la entrada</dd></div>
         </dl>
         <div class="acciones">
           <a class="boton boton-whatsapp" id="b-whatsapp" href="#" target="_blank" rel="noopener">
@@ -196,7 +231,7 @@
             Confirmar con el organizador</a>
           <button type="button" class="boton boton-whatsapp" id="b-compartir" disabled>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z"/></svg>
-            Compartir boleto por WhatsApp</button>
+            <span id="b-compartir-texto">Compartir boleto por WhatsApp</span></button>
           <button type="button" class="boton" id="b-descargar" disabled>Descargar imagen</button>
           <button type="button" class="boton" id="b-correo" hidden>Enviar a mi correo</button>
           <button type="button" class="boton" id="b-imprimir">Imprimir</button>
@@ -220,7 +255,7 @@
       <header class="vista-titulo">
         <span class="etiqueta">Consulta</span>
         <h1 id="t-mi-lugar">Mi lugar</h1>
-        <p>Recupera tu boleto con el folio y el correo con el que te registraste. Desde aquí también puedes liberar tu lugar.</p>
+        <p>Recupera tus boletos con el folio y el correo con el que te registraste. Desde aquí también puedes liberar tus lugares.</p>
       </header>
       <form class="panel mi-lugar" id="form-consulta" novalidate>
         <div class="campo"><label for="folio">Folio</label>
@@ -228,8 +263,8 @@
         <div class="campo"><label for="correo-consulta">Correo</label>
           <input id="correo-consulta" name="correo" type="email" autocomplete="email" maxlength="120" required></div>
         <div class="fila-botones">
-          <button type="submit" class="boton boton-principal" id="btn-consultar">Ver mi boleto</button>
-          <button type="button" class="boton boton-peligro" id="btn-cancelar">Liberar mi lugar</button>
+          <button type="submit" class="boton boton-principal" id="btn-consultar">Ver mis boletos</button>
+          <button type="button" class="boton boton-peligro" id="btn-cancelar">Liberar mis lugares</button>
         </div>
         <p class="mensaje" id="mensaje-consulta" role="alert"></p>
       </form>
@@ -244,10 +279,10 @@
   </a>
 
   <dialog id="confirmar" aria-labelledby="confirmar-titulo">
-    <h2 id="confirmar-titulo">¿Liberar tu lugar?</h2>
-    <p id="confirmar-texto">Tu asiento quedará libre para otra persona y tu código QR dejará de servir.</p>
+    <h2 id="confirmar-titulo">¿Liberar tus lugares?</h2>
+    <p id="confirmar-texto">Todos los asientos de este registro quedarán libres para otras personas y sus códigos QR dejarán de servir.</p>
     <div class="fila-botones"><button type="button" class="boton" id="confirmar-no">Conservar</button>
-      <button type="button" class="boton boton-peligro" id="confirmar-si">Liberar lugar</button></div>
+      <button type="button" class="boton boton-peligro" id="confirmar-si">Liberar lugares</button></div>
   </dialog>
 
   <script src="js/config.js"></script>

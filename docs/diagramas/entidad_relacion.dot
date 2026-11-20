@@ -6,7 +6,8 @@ digraph ER {
     <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>evento</B></FONT></TD></TR>
     <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  smallint</TD></TR>
     <TR><TD ALIGN="LEFT">nombre, tema  text</TD></TR><TR><TD ALIGN="LEFT">fecha  date</TD></TR>
-    <TR><TD ALIGN="LEFT">hora_inicio, hora_fin  time</TD></TR><TR><TD ALIGN="LEFT">lugar, ponente  text</TD></TR><TR><TD ALIGN="LEFT">cupo  smallint</TD></TR></TABLE>>];
+    <TR><TD ALIGN="LEFT">hora_inicio, hora_fin  time</TD></TR><TR><TD ALIGN="LEFT">lugar, ponente  text</TD></TR><TR><TD ALIGN="LEFT">cupo  smallint</TD></TR>
+    <TR><TD ALIGN="LEFT">max_lugares_registro  smallint (5)</TD></TR><TR><TD ALIGN="LEFT">max_accesibles_registro  smallint (1)</TD></TR></TABLE>>];
   mesas [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
     <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>mesas</B></FONT></TD></TR>
     <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  smallint</TD></TR>
@@ -15,15 +16,28 @@ digraph ER {
     <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>asientos</B></FONT></TD></TR>
     <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  text  ('M03-A05')</TD></TR>
     <TR><TD ALIGN="LEFT" PORT="mesa"><B>FK</B> mesa_id</TD></TR><TR><TD ALIGN="LEFT">numero  smallint</TD></TR>
+    <TR><TD ALIGN="LEFT">accesible  boolean  (lugar para discapacidad)</TD></TR>
     <TR><TD ALIGN="LEFT"><I>UQ (mesa_id, numero)</I></TD></TR></TABLE>>];
   asistentes [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
     <TR><TD BGCOLOR="#785a28"><FONT COLOR="white"><B>asistentes</B></FONT></TD></TR>
     <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  integer</TD></TR>
-    <TR><TD ALIGN="LEFT">folio  text  <I>UQ</I></TD></TR><TR><TD ALIGN="LEFT">codigo_qr  text  <I>UQ</I></TD></TR>
-    <TR><TD ALIGN="LEFT">nombre  text</TD></TR><TR><TD ALIGN="LEFT">correo  text  <I>UQ</I></TD></TR><TR><TD ALIGN="LEFT">telefono  text  <I>UQ</I></TD></TR>
-    <TR><TD ALIGN="LEFT" PORT="asiento"><B>FK</B> asiento_id  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT">folio  text  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT">nombre  text</TD></TR><TR><TD ALIGN="LEFT">correo  text  <I>UQ</I>  (solo @gmail.com)</TD></TR><TR><TD ALIGN="LEFT">telefono  text  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT">discapacidad  text  (nulo, silla_ruedas, motriz,</TD></TR>
+    <TR><TD ALIGN="LEFT">                       visual, auditiva u otra)</TD></TR>
+    <TR><TD ALIGN="LEFT">discapacidad_detalle  text  (obligatorio si es otra)</TD></TR>
     <TR><TD ALIGN="LEFT">modo  text</TD></TR><TR><TD ALIGN="LEFT">confirmado_whatsapp  boolean</TD></TR>
-    <TR><TD ALIGN="LEFT">asistio_en  timestamptz</TD></TR><TR><TD ALIGN="LEFT">creado_en, actualizado_en</TD></TR></TABLE>>];
+    <TR><TD ALIGN="LEFT">creado_en, actualizado_en</TD></TR></TABLE>>];
+  boletos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
+    <TR><TD BGCOLOR="#785a28"><FONT COLOR="white"><B>boletos</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  integer</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="asi"><B>FK</B> asistente_id</TD></TR>
+    <TR><TD ALIGN="LEFT">numero  smallint  (boleto 1 de N)</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="asiento"><B>FK</B> asiento_id  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT">codigo_qr  text  <I>UQ</I></TD></TR>
+    <TR><TD ALIGN="LEFT">asistio_en  timestamptz</TD></TR>
+    <TR><TD ALIGN="LEFT"><I>UQ (asistente_id, numero)</I></TD></TR>
+    <TR><TD ALIGN="LEFT"><I>trigger: lugar accesible solo con discapacidad</I></TD></TR></TABLE>>];
   administradores [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
     <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>administradores</B></FONT></TD></TR>
     <TR><TD ALIGN="LEFT" PORT="id"><B>PK</B> id  smallint</TD></TR>
@@ -35,15 +49,16 @@ digraph ER {
   accesos [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#555555">
     <TR><TD BGCOLOR="#2f3e46"><FONT COLOR="white"><B>accesos</B></FONT></TD></TR>
     <TR><TD ALIGN="LEFT"><B>PK</B> id  integer</TD></TR>
-    <TR><TD ALIGN="LEFT" PORT="asi"><B>FK</B> asistente_id  (nulo si no existe)</TD></TR>
+    <TR><TD ALIGN="LEFT" PORT="bol"><B>FK</B> boleto_id  (nulo si no existe)</TD></TR>
     <TR><TD ALIGN="LEFT" PORT="adm"><B>FK</B> admin_id</TD></TR>
     <TR><TD ALIGN="LEFT">codigo_leido  text</TD></TR><TR><TD ALIGN="LEFT">resultado  VALIDO | YA_INGRESO | NO_VALIDO</TD></TR><TR><TD ALIGN="LEFT">fecha  timestamptz</TD></TR></TABLE>>];
 
   evento:id -> mesas:ev [dir=both, arrowtail=tee, arrowhead=crow, label="1 : N\ntiene"];
   mesas:id -> asientos:mesa [dir=both, arrowtail=tee, arrowhead=crow, label="1 : N\ntiene"];
-  asientos:id -> asistentes:asiento [dir=both, arrowtail=tee, arrowhead=teeodot, label="1 : 0..1\nocupa"];
-  asistentes:id -> accesos:asi [dir=both, arrowtail=teeodot, arrowhead=crowodot, label="1 : N\nse valida"];
+  asistentes:id -> boletos:asi [dir=both, arrowtail=tee, arrowhead=crow, label="1 : 1..5\nreserva"];
+  asientos:id -> boletos:asiento [dir=both, arrowtail=tee, arrowhead=teeodot, label="1 : 0..1\nocupa"];
+  boletos:id -> accesos:bol [dir=both, arrowtail=teeodot, arrowhead=crowodot, label="1 : N\nse valida"];
   administradores:id -> accesos:adm [dir=both, arrowtail=tee, arrowhead=crowodot, label="1 : N\nregistra"];
   administradores:id -> sesiones_admin:adm [dir=both, arrowtail=tee, arrowhead=crowodot, label="1 : N\nabre"];
-  {rank=same; administradores; asistentes}
+  {rank=same; administradores; boletos}
 }

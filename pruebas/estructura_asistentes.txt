@@ -1,34 +1,70 @@
-                                                                 Table "public.asistentes"
-       Column        |           Type           | Collation | Nullable |           Default            | Storage  | Compression | Stats target | Description 
----------------------+--------------------------+-----------+----------+------------------------------+----------+-------------+--------------+-------------
- id                  | integer                  |           | not null | generated always as identity | plain    |             |              | 
- folio               | text                     |           | not null |                              | extended |             |              | 
- codigo_qr           | text                     |           | not null |                              | extended |             |              | 
- nombre              | text                     |           | not null |                              | extended |             |              | 
- correo              | text                     |           | not null |                              | extended |             |              | 
- telefono            | text                     |           | not null |                              | extended |             |              | 
- asiento_id          | text                     |           | not null |                              | extended |             |              | 
- modo                | text                     |           | not null |                              | extended |             |              | 
- confirmado_whatsapp | boolean                  |           | not null | false                        | plain    |             |              | 
- asistio_en          | timestamp with time zone |           |          |                              | plain    |             |              | 
- creado_en           | timestamp with time zone |           | not null | now()                        | plain    |             |              | 
- actualizado_en      | timestamp with time zone |           | not null | now()                        | plain    |             |              | 
-Indexes:
-    "asistentes_pkey" PRIMARY KEY, btree (id)
-    "asistentes_asiento_unico" UNIQUE CONSTRAINT, btree (asiento_id)
-    "asistentes_correo_unico" UNIQUE CONSTRAINT, btree (correo)
-    "asistentes_folio_unico" UNIQUE CONSTRAINT, btree (folio)
-    "asistentes_qr_unico" UNIQUE CONSTRAINT, btree (codigo_qr)
-    "asistentes_telefono_unico" UNIQUE CONSTRAINT, btree (telefono)
-Check constraints:
-    "asistentes_correo_check" CHECK (char_length(correo) <= 120)
-    "asistentes_modo_check" CHECK (modo = ANY (ARRAY['auto'::text, 'manual'::text, 'admin'::text]))
-    "asistentes_nombre_check" CHECK (char_length(nombre) >= 3 AND char_length(nombre) <= 80)
-    "asistentes_telefono_check" CHECK (telefono ~ '^[0-9]{10}$'::text)
-Foreign-key constraints:
-    "asistentes_asiento_id_fkey" FOREIGN KEY (asiento_id) REFERENCES asientos(id)
-Referenced by:
-    TABLE "accesos" CONSTRAINT "accesos_asistente_id_fkey" FOREIGN KEY (asistente_id) REFERENCES asistentes(id) ON DELETE SET NULL
-Policies (row security enabled): (none)
-Access method: heap
+Tabla "public.asistentes"
+
+ columna              | tipo                     | nulo     | predeterminado              
+----------------------+--------------------------+----------+------------------------------
+ id                   | integer                  | not null | generated always as identity
+ folio                | text                     | not null |                             
+ nombre               | text                     | not null |                             
+ correo               | text                     | not null |                             
+ telefono             | text                     | not null |                             
+ discapacidad         | text                     |          |                             
+ discapacidad_detalle | text                     |          |                             
+ modo                 | text                     | not null |                             
+ confirmado_whatsapp  | boolean                  | not null | false                       
+ creado_en            | timestamp with time zone | not null | now()                       
+ actualizado_en       | timestamp with time zone | not null | now()                       
+(11 filas)
+
+Restricciones (PK, FK, UNIQUE, CHECK)
+
+ restriccion                           | definicion                                                                                                                
+---------------------------------------+----------------------------------------------------------------------------------------------------------------------------
+ asistentes_correo_check               | CHECK (((char_length(correo) <= 120) AND (correo ~ '^[a-z0-9._%+-]+@gmail\.com$'::text)))                                 
+ asistentes_detalle_valido             | CHECK (((discapacidad IS NOT NULL) OR (discapacidad_detalle IS NULL)))                                                    
+ asistentes_discapacidad_check         | CHECK ((discapacidad = ANY (ARRAY['silla_ruedas'::text, 'motriz'::text, 'visual'::text, 'auditiva'::text, 'otra'::text])))
+ asistentes_discapacidad_detalle_check | CHECK ((char_length(discapacidad_detalle) <= 200))                                                                        
+ asistentes_modo_check                 | CHECK ((modo = ANY (ARRAY['auto'::text, 'manual'::text, 'admin'::text])))                                                 
+ asistentes_nombre_check               | CHECK (((char_length(nombre) >= 3) AND (char_length(nombre) <= 80)))                                                      
+ asistentes_otra_descrita              | CHECK (((discapacidad IS DISTINCT FROM 'otra'::text) OR (char_length(COALESCE(discapacidad_detalle, ''::text)) >= 3)))    
+ asistentes_telefono_check             | CHECK ((telefono ~ '^[0-9]{10}$'::text))                                                                                  
+ asistentes_pkey                       | PRIMARY KEY (id)                                                                                                          
+ asistentes_correo_unico               | UNIQUE (correo)                                                                                                           
+ asistentes_folio_unico                | UNIQUE (folio)                                                                                                            
+ asistentes_telefono_unico             | UNIQUE (telefono)                                                                                                         
+(12 filas)
+
+
+Tabla "public.boletos"
+
+ columna      | tipo                     | nulo     | predeterminado              
+--------------+--------------------------+----------+------------------------------
+ id           | integer                  | not null | generated always as identity
+ asistente_id | integer                  | not null |                             
+ numero       | smallint                 | not null |                             
+ asiento_id   | text                     | not null |                             
+ codigo_qr    | text                     | not null |                             
+ asistio_en   | timestamp with time zone |          |                             
+ creado_en    | timestamp with time zone | not null | now()                       
+(7 filas)
+
+Restricciones (PK, FK, UNIQUE, CHECK)
+
+ restriccion                    | definicion                                                            
+--------------------------------+------------------------------------------------------------------------
+ boletos_numero_check           | CHECK (((numero >= 1) AND (numero <= 20)))                            
+ boletos_asiento_id_fkey        | FOREIGN KEY (asiento_id) REFERENCES asientos(id)                      
+ boletos_asistente_id_fkey      | FOREIGN KEY (asistente_id) REFERENCES asistentes(id) ON DELETE CASCADE
+ boletos_pkey                   | PRIMARY KEY (id)                                                      
+ boletos_asiento_unico          | UNIQUE (asiento_id) DEFERRABLE                                        
+ boletos_asistente_numero_unico | UNIQUE (asistente_id, numero)                                         
+ boletos_qr_unico               | UNIQUE (codigo_qr)                                                    
+(7 filas)
+
+Triggers
+
+ trigger           | definicion                                                                                                                                            
+-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ boletos_accesible | CREATE TRIGGER boletos_accesible BEFORE INSERT OR UPDATE OF asiento_id, asistente_id ON public.boletos FOR EACH ROW EXECUTE FUNCTION _revisar_boleto()
+(1 filas)
+
 

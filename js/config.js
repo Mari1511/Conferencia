@@ -22,8 +22,25 @@ window.CONFIG = {
        + 'o se pierde, sin depender de reflejos ni de campeones de moda.'
   },
 
-  /* Si cambias mesas o asientos, cambia también supabase/schema.sql (sección 2). */
-  sala: { mesas: 10, asientosPorMesa: 10 },
+  /* Si cambias algo de «sala», cambia también supabase/schema.sql (sección 2). */
+  sala: {
+    mesas: 10,
+    asientosPorMesa: 10,
+    maxPorRegistro: 5,          // lugares que puede reservar una persona (ella + acompañantes)
+    maxAccesiblesPorRegistro: 1,
+    /* Lugares reservados para personas con discapacidad (♿), cerca del escenario */
+    accesibles: ['M01-A01', 'M01-A02', 'M02-A01', 'M02-A02', 'M03-A01', 'M03-A02', 'M04-A01', 'M04-A02']
+  },
+
+  /* Tipos de discapacidad que se pueden indicar al pedir un lugar accesible.
+     Las claves deben coincidir con supabase/schema.sql (tabla asistentes). */
+  discapacidades: {
+    silla_ruedas: 'Motriz: uso silla de ruedas',
+    motriz: 'Motriz: muletas, andadera o bastón',
+    visual: 'Visual',
+    auditiva: 'Auditiva',
+    otra: 'Otra (descríbela)'
+  },
 
   /* Número que recibe las confirmaciones: formato internacional sin «+».
      México: 52 + 10 dígitos, p. ej. '525512345678'.  ← CÁMBIALO */

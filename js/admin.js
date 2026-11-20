@@ -1,8 +1,9 @@
 /* ==========================================================================
    admin.js — Panel de organización
      · Inicio de sesión (token de sesión, contraseña con bcrypt en Supabase)
-     · Asistentes: consultar, buscar, registrar, modificar, reasignar asiento,
-       marcar confirmación de WhatsApp, eliminar y exportar a CSV
+     · Asistentes: consultar, buscar, registrar (uno o varios lugares),
+       modificar, reasignar asientos, datos de accesibilidad, marcar
+       confirmación de WhatsApp, eliminar y exportar a CSV (una fila por boleto)
      · Control de acceso: leer QR con la cámara (jsQR), desde foto o a mano,
        validar y llevar bitácora de lecturas
    ========================================================================== */
@@ -66,9 +67,10 @@
     ]).catch(() => [null, null]);
     if (!res || !filas) return;
     lista = filas;
-    $('#e-registrados').textContent = res.registrados;
-    $('#e-cupo').textContent = `de ${res.cupo} lugares`;
-    $('#e-libres').textContent = res.cupo - res.registrados;
+    $('#e-registrados').textContent = res.ocupados;
+    $('#e-cupo').textContent = `de ${res.cupo} lugares · ${res.registros} ${res.registros === 1 ? 'registro' : 'registros'}`;
+    $('#e-libres').textContent = res.cupo - res.ocupados;
+    $('#e-accesibles').textContent = `${res.accesibles_libres} accesibles ♿ libres`;
     $('#e-asistieron').textContent = res.asistieron;
     $('#e-confirmados').textContent = res.confirmados;
     pintarTabla();
@@ -86,37 +88,59 @@
     lista.forEach((r) => {
       const tr = document.createElement('tr');
       tr.dataset.id = r.id;
-      tr.append(celda(r.mesa), celda(r.lugar), celda(r.folio, 'secundario'), celda(r.nombre), celda(r.correo, 'secundario'), celda(r.telefono, 'secundario'));
+      const n = r.boletos.length;
+      tr.append(celda(lugaresCortos(r)), celda(r.folio, 'secundario'), celda(r.nombre), celda(r.correo, 'secundario'), celda(r.telefono, 'secundario'));
+      const acc = celda(r.discapacidad ? '♿ ' + tipoDe(r) : '—', r.discapacidad ? 'accesible' : 'secundario');
+      if (r.discapacidad_detalle) acc.title = r.discapacidad_detalle;
+      tr.appendChild(acc);
       const conf = document.createElement('td');
       conf.innerHTML = `<span class="insignia ${r.confirmado_whatsapp ? 'insignia-si">Sí' : 'insignia-no">No'}</span>`;
       const ing = document.createElement('td');
-      ing.innerHTML = r.asistio_en ? `<span class="insignia insignia-si"></span>` : '<span class="insignia insignia-no">Pendiente</span>';
-      if (r.asistio_en) ing.firstChild.textContent = hora(r.asistio_en);
-      const acc = document.createElement('td');
-      acc.innerHTML = '<div class="acciones-fila"><button type="button" class="boton boton-texto" data-accion="editar">Editar</button><button type="button" class="boton boton-texto" data-accion="eliminar">Eliminar</button></div>';
-      tr.append(conf, ing, acc);
+      const entraron = r.boletos.filter((b) => b.asistio_en);
+      const ins = document.createElement('span');
+      ins.className = 'insignia ' + (entraron.length ? 'insignia-si' : 'insignia-no');
+      ins.textContent = !entraron.length ? 'Pendiente' : n === 1 ? hora(entraron[0].asistio_en) : `${entraron.length}/${n}`;
+      ing.appendChild(ins);
+      const accs = document.createElement('td');
+      accs.innerHTML = '<div class="acciones-fila"><button type="button" class="boton boton-texto" data-accion="editar">Editar</button><button type="button" class="boton boton-texto" data-accion="eliminar">Eliminar</button></div>';
+      tr.append(conf, ing, accs);
       cuerpo.appendChild(tr);
     });
   }
 
-  async function opcionesAsiento(actual) {
-    const ocupados = await Datos.ocupados();
-    const sel = $('#ed-asiento');
-    sel.textContent = '';
-    if (!actual) sel.add(new Option('Automático (primer lugar libre)', ''));
-    let grupo = null;
-    Datos.todosLosAsientos().forEach((id) => {
-      if (ocupados.has(id) && id !== actual) return;
-      const p = Datos.partesAsiento(id);
-      if (!grupo || grupo.dataset.mesa !== String(p.mesa)) {
-        grupo = document.createElement('optgroup');
-        grupo.label = `Mesa ${p.mesa}`;
-        grupo.dataset.mesa = p.mesa;
-        sel.appendChild(grupo);
-      }
-      grupo.appendChild(new Option(`Mesa ${p.mesa}, asiento ${p.lugar}${id === actual ? ' (actual)' : ''}`, id));
-    });
-    sel.value = actual || '';
+  const lugaresCortos = (r) => r.boletos.map((b) => `M${b.mesa}-A${b.lugar}${b.accesible ? '♿' : ''}`).join(', ');
+  const lugaresLargos = (r) => r.boletos.map((b) => `mesa ${b.mesa}, asiento ${b.lugar}${b.accesible ? ' ♿' : ''}`).join('; ');
+  const tipoDe = (r) => Datos.TIPOS[r.discapacidad] || r.discapacidad;
+  let ocupadosEditor = new Set();
+
+  /** Un <select> de asiento por boleto. En altas, «Automático» completa los que se dejen así. */
+  function pintarSelectores() {
+    const caja = $('#ed-asientos');
+    const previos = [...caja.querySelectorAll('select')].map((x) => x.value);
+    const actuales = editando ? editando.boletos.map((b) => b.asiento) : [];
+    const n = editando ? actuales.length : Math.min(Datos.MAX, Math.max(1, Number($('#ed-cantidad').value) || 1));
+    caja.textContent = '';
+    for (let i = 0; i < n; i++) {
+      const sel = document.createElement('select');
+      sel.name = 'asiento';
+      sel.setAttribute('aria-label', `Asiento del boleto ${i + 1}`);
+      if (!editando) sel.add(new Option(`Boleto ${i + 1}: automático`, ''));
+      let grupo = null;
+      Datos.todosLosAsientos().forEach((id) => {
+        if (ocupadosEditor.has(id) && !actuales.includes(id)) return;
+        const p = Datos.partesAsiento(id);
+        if (!grupo || grupo.dataset.mesa !== String(p.mesa)) {
+          grupo = document.createElement('optgroup');
+          grupo.label = `Mesa ${p.mesa}`;
+          grupo.dataset.mesa = p.mesa;
+          sel.appendChild(grupo);
+        }
+        const marca = Datos.esAccesible(id) ? ' ♿' : '';
+        grupo.appendChild(new Option(`Boleto ${i + 1}: mesa ${p.mesa}, asiento ${p.lugar}${marca}${id === actuales[i] ? ' (actual)' : ''}`, id));
+      });
+      sel.value = previos[i] ?? actuales[i] ?? '';
+      caja.appendChild(sel);
+    }
   }
 
   async function abrirEditor(r) {
@@ -124,15 +148,22 @@
     const f = $('#form-editar');
     f.reset();
     mensaje($('#mensaje-editar'), '');
-    $('#t-editar').textContent = r ? 'Editar asistente' : 'Nuevo registro';
+    $('#t-editar').textContent = r ? 'Editar registro' : 'Nuevo registro';
     $('#ed-confirmado-fila').hidden = !r;
+    $('#ed-cantidad-fila').hidden = Boolean(r);
+    $('#ed-asientos').textContent = '';
     if (r) {
       f.elements.nombre.value = r.nombre;
       f.elements.correo.value = r.correo;
       f.elements.telefono.value = r.telefono;
       f.elements.confirmado.checked = Boolean(r.confirmado_whatsapp);
+      f.elements.accesible.checked = Boolean(r.discapacidad);
+      f.elements.discapacidad.value = r.discapacidad || '';
+      f.elements.discapacidad_detalle.value = r.discapacidad_detalle || '';
     }
-    await opcionesAsiento(r ? r.asiento : null);
+    $('#ed-campos-discapacidad').hidden = !f.elements.accesible.checked;
+    ocupadosEditor = await Datos.ocupados();
+    pintarSelectores();
     $('#dlg-editar').showModal();
   }
 
@@ -146,22 +177,37 @@
       if (!b) return;
       const r = lista.find((x) => String(x.id) === b.closest('tr').dataset.id);
       if (b.dataset.accion === 'editar') abrirEditor(r);
-      else { eliminando = r; $('#eliminar-texto').textContent = `Se eliminará a ${r.nombre} (mesa ${r.mesa}, asiento ${r.lugar}) y su código QR dejará de servir.`; $('#dlg-eliminar').showModal(); }
+      else {
+        eliminando = r;
+        const n = r.boletos.length;
+        $('#eliminar-texto').textContent = `Se eliminará el registro de ${r.nombre} (${n} ${n === 1 ? 'lugar' : 'lugares'}: ${lugaresLargos(r)}) y ${n === 1 ? 'su código QR dejará' : 'sus códigos QR dejarán'} de servir.`;
+        $('#dlg-eliminar').showModal();
+      }
     });
     $('#ed-cancelar').addEventListener('click', () => $('#dlg-editar').close());
+    Object.entries(Datos.TIPOS).forEach(([v, t]) => $('#ed-discapacidad').add(new Option(t, v)));
+    $('#ed-cantidad').max = Datos.MAX;
+    $('#ed-cantidad').addEventListener('input', pintarSelectores);
+    $('#ed-accesible').addEventListener('change', (e) => { $('#ed-campos-discapacidad').hidden = !e.target.checked; });
     $('#form-editar').addEventListener('submit', async (e) => {
       e.preventDefault();
       const f = e.target;
       const m = $('#mensaje-editar');
+      const acc = f.elements.accesible.checked;
+      const asientos = [...$('#ed-asientos').querySelectorAll('select')].map((x) => x.value).filter(Boolean);
       const d = { nombre: f.elements.nombre.value, correo: f.elements.correo.value, telefono: f.elements.telefono.value,
-        asiento: f.elements.asiento.value || null, confirmado_whatsapp: f.elements.confirmado.checked };
+        cantidad: editando ? editando.boletos.length : Number(f.elements.cantidad.value) || 1, asientos,
+        discapacidad: acc ? f.elements.discapacidad.value || null : null,
+        discapacidad_detalle: acc ? f.elements.discapacidad_detalle.value : '',
+        confirmado_whatsapp: f.elements.confirmado.checked };
       const errs = Datos.validar(d);
+      if (acc && !f.elements.discapacidad.value) errs.discapacidad = 'Elige el tipo de discapacidad.';
       if (Object.keys(errs).length) { mensaje(m, Object.values(errs)[0], 'error'); return; }
       try {
         const r = await seguro(() => (editando ? A.actualizar(editando.id, d) : A.registrar(d)), m);
         if (!r) return;
         $('#dlg-editar').close();
-        mensaje($('#mensaje-tabla'), editando ? `Se guardaron los cambios de ${r.nombre}.` : `${r.nombre} quedó registrado en la mesa ${r.mesa}, asiento ${r.lugar} (folio ${r.folio}).`, 'ok');
+        mensaje($('#mensaje-tabla'), editando ? `Se guardaron los cambios de ${r.nombre}.` : `${r.nombre} quedó registrado: ${lugaresLargos(r)} (folio ${r.folio}).`, 'ok');
         cargar();
       } catch (err) { /* el mensaje ya se mostró */ }
     });
@@ -177,8 +223,10 @@
 
   function exportarCSV() {
     const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-    const filas = [['Mesa', 'Asiento', 'Folio', 'Nombre', 'Correo', 'WhatsApp', 'Confirmó WhatsApp', 'Ingreso', 'Registro']]
-      .concat(lista.map((r) => [r.mesa, r.lugar, r.folio, r.nombre, r.correo, r.telefono, r.confirmado_whatsapp ? 'Sí' : 'No', r.asistio_en || '', r.creado_en]));
+    const filas = [['Folio', 'Boleto', 'Mesa', 'Asiento', 'Lugar accesible', 'Nombre', 'Correo', 'WhatsApp', 'Discapacidad', 'Detalle', 'Confirmó WhatsApp', 'Ingreso', 'Registro']]
+      .concat(lista.flatMap((r) => r.boletos.map((b) => [r.folio, `${b.numero} de ${r.boletos.length}`, b.mesa, b.lugar, b.accesible ? 'Sí' : 'No',
+        r.nombre, r.correo, r.telefono, r.discapacidad ? tipoDe(r) : '', r.discapacidad_detalle || '',
+        r.confirmado_whatsapp ? 'Sí' : 'No', b.asistio_en || '', r.creado_en])));
     const csv = '\ufeff' + filas.map((f) => f.map(q).join(',')).join('\r\n');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
@@ -266,9 +314,16 @@
     caja.dataset.resultado = r.resultado;
     $('#resultado-estado').textContent = titulo;
     const a = r.asistente;
+    const b = r.boleto;
     let detalle = r.mensaje || 'Este código no pertenece a ningún registro. Pide el folio y búscalo en Asistentes.';
-    if (a && r.resultado === 'VALIDO') detalle = `${a.nombre}: mesa ${a.mesa}, asiento ${a.lugar}. Bienvenida(o).`;
-    if (a && r.resultado === 'YA_INGRESO') detalle = `${a.nombre} ya entró a las ${hora(a.asistio_en)} (mesa ${a.mesa}, asiento ${a.lugar}).`;
+    if (a && b) {
+      const n = a.boletos.length;
+      const lugar = `mesa ${b.mesa}, asiento ${b.lugar}${b.accesible ? ' ♿' : ''}`;
+      const quien = n > 1 ? `${a.nombre} (boleto ${b.numero} de ${n}${b.numero > 1 ? ', acompañante' : ''})` : a.nombre;
+      if (r.resultado === 'VALIDO') detalle = `${quien}: ${lugar}. Bienvenida(o).`;
+      if (r.resultado === 'YA_INGRESO') detalle = `${quien} ya entró a las ${hora(b.asistio_en)} (${lugar}).`;
+      if (a.discapacidad) detalle += ` ♿ Requiere apoyo: ${tipoDe(a)}${a.discapacidad_detalle ? ' — ' + a.discapacidad_detalle : ''}.`;
+    }
     $('#resultado-detalle').textContent = detalle + (origen ? ` · Leído con ${origen}.` : '');
   }
 
@@ -282,7 +337,7 @@
     l.forEach((x) => {
       const li = document.createElement('li');
       const t = document.createElement('span'); t.textContent = hora(x.fecha);
-      const n = document.createElement('span'); n.textContent = x.nombre ? `${x.nombre} · M${x.mesa}-A${x.lugar}` : x.codigo_leido;
+      const n = document.createElement('span'); n.textContent = x.nombre ? `${x.nombre} · M${x.mesa}-A${x.lugar}${x.total > 1 ? ` (${x.numero}/${x.total})` : ''}` : x.codigo_leido;
       const r = document.createElement('span'); r.className = x.resultado; r.textContent = txt[x.resultado];
       li.append(t, n, r); ul.appendChild(li);
     });
