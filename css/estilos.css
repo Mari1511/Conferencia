@@ -423,3 +423,16 @@ td.accesible { color: #cfe0ff; }
   .boleto { padding: 1.75rem 1.1rem; }
   .boleto .boton { letter-spacing: 0.08em; padding: 0.55rem 0.9rem; }
 }
+
+/* Contador sobre el plano: asientos elegidos y lugares libres */
+.contador-sala { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin-bottom: 1rem; }
+.contador-dato { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.55rem 0.7rem; border: 1px solid var(--oro-5); background: rgba(1, 10, 19, 0.6); }
+.contador-dato strong { font: 400 1.35rem/1 var(--f-titulo); color: var(--oro-1); }
+.contador-dato span { font-size: 0.75rem; color: var(--texto-2); }
+.contador-dato:first-child { border-color: var(--oro-4); }
+.contador-dato:first-child strong { color: var(--oro-2); }
+.contador-dato.completo { border-color: var(--turquesa); }
+.contador-dato.completo strong { color: var(--turquesa); }
+.contador-dato.accesible { border-color: rgba(111, 168, 255, 0.45); }
+.contador-dato.accesible strong { color: #8fb8ff; }
+@media (max-width: 600px) { .contador-dato { padding: 0.45rem 0.5rem; } .contador-dato strong { font-size: 1.1rem; } .contador-dato span { font-size: 0.68rem; } }

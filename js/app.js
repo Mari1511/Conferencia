@@ -18,7 +18,25 @@
   const asientosDe = (r) => (r && Array.isArray(r.boletos) ? r.boletos.map((b) => b.asiento) : []);
 
   /* ---------------- Disponibilidad ---------------- */
+  let ultimosOcupados = new Set();
+  /** Contador sobre el plano: cuántos asientos lleva elegidos y cuántos quedan libres */
+  function pintarContador() {
+    const n = cantidad();
+    const el = Sala.elegidos.length;
+    const manual = modo() === 'manual';
+    $('#cs-elegidos').textContent = manual ? `${el} de ${n}` : `${n}`;
+    const faltan = n - el;
+    $('#cs-elegidos-texto').textContent = !manual
+      ? plural(n, 'lugar (asignación automática)', 'lugares (asignación automática)')
+      : faltan > 0 ? `elegidos · ${plural(faltan, 'te falta 1', `te faltan ${faltan}`)}` : 'elegidos · ¡listo!';
+    $('.contador-dato').classList.toggle('completo', manual && faltan === 0);
+    const accLibres = (CFG.sala.accesibles || []).filter((id) => !ultimosOcupados.has(id)).length;
+    $('#cs-libres').textContent = TOTAL - ultimosOcupados.size;
+    $('#cs-accesibles').textContent = accLibres;
+  }
   function pintarCupo(ocupados) {
+    ultimosOcupados = ocupados;
+    pintarContador();
     $('#libres-numero').textContent = TOTAL - ocupados.size;
     $('#cupo-relleno').style.width = (ocupados.size / TOTAL) * 100 + '%';
     const lleno = ocupados.size >= TOTAL;
@@ -55,6 +73,7 @@
   }
 
   function resumen() {
+    pintarContador();
     const el = $('#resumen');
     const n = cantidad();
     const acc = quiereAccesible();
@@ -138,6 +157,7 @@
       const n = e.target.name;
       if (n === 'modo' && e.target.value === 'auto') Sala.limpiar();
       if (['cantidad', 'requiere_accesible', 'discapacidad'].includes(n)) {
+        if (n === 'cantidad') $('#error-asientos').textContent = '';   // sincronizar() vuelve a avisar si recorta
         sincronizar();
         if (n === 'cantidad') $('#error-cantidad').textContent = '';
         if (n === 'requiere_accesible' && !quiereAccesible()) ['discapacidad', 'discapacidad_detalle'].forEach((c) => { $('#error-' + c).textContent = ''; });

@@ -9,7 +9,7 @@
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/marcellus-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="stylesheet" href="css/estilos.css?v=20261120b">
 </head>
 <body>
   <!-- ======================= Barra de navegación ======================= -->
@@ -190,6 +190,11 @@
 
         <div class="panel col-sala">
           <span class="etiqueta">Plano del recinto</span>
+          <div class="contador-sala" aria-live="polite">
+            <div class="contador-dato"><strong id="cs-elegidos">0 de 1</strong><span id="cs-elegidos-texto">asientos elegidos</span></div>
+            <div class="contador-dato"><strong id="cs-libres">100</strong><span>lugares libres</span></div>
+            <div class="contador-dato accesible"><strong id="cs-accesibles">8</strong><span>accesibles ♿ libres</span></div>
+          </div>
           <div class="leyenda" aria-hidden="true">
             <span><i class="punto"></i>Libre</span><span><i class="punto punto-ocupado"></i>Ocupado</span>
             <span><i class="punto punto-elegido"></i>Elegido</span><span><i class="punto punto-propio"></i>Tuyo</span>
@@ -285,12 +290,12 @@
       <button type="button" class="boton boton-peligro" id="confirmar-si">Liberar lugares</button></div>
   </dialog>
 
-  <script src="js/config.js"></script>
-  <script src="js/vendor/qrcode.min.js"></script>
-  <script src="js/datos.js"></script>
-  <script src="js/sala.js"></script>
-  <script src="js/comun.js"></script>
-  <script src="js/compartir.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/config.js?v=20261120b"></script>
+  <script src="js/vendor/qrcode.min.js?v=20261120b"></script>
+  <script src="js/datos.js?v=20261120b"></script>
+  <script src="js/sala.js?v=20261120b"></script>
+  <script src="js/comun.js?v=20261120b"></script>
+  <script src="js/compartir.js?v=20261120b"></script>
+  <script src="js/app.js?v=20261120b"></script>
 </body>
 </html>
